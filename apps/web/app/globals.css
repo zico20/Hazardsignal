@@ -2961,17 +2961,6 @@ form,
     font-size: 0.64rem;
   }
 
-  .map-legend-card {
-    left: 12px;
-    bottom: 12px;
-    min-width: 120px;
-    padding: 10px;
-  }
-
-  .leaflet-control-zoom {
-    margin-top: 60px !important;
-  }
-
   .ops-table-wrap {
     overflow: visible;
     border: 0;
@@ -3046,6 +3035,70 @@ form,
   .leaflet-control-zoom {
     margin-top: 56px !important;
     margin-left: 10px !important;
+  }
+
+  /* ── Weather strip ── */
+  .weather-strip {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .weather-chip {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  .weather-chip-icon {
+    font-size: 0.8rem;
+  }
+
+  /* ── Hero signal row ── */
+  .hero-signal-row {
+    gap: 6px;
+  }
+
+  .signal-pill {
+    padding: 5px 9px;
+    font-size: 0.74rem;
+    gap: 5px;
+  }
+
+  .last-updated-badge {
+    padding: 4px 9px;
+    font-size: 0.72rem;
+  }
+
+  /* ── Push subscribe button ── */
+  .push-subscribe-btn {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+    gap: 4px;
+  }
+
+  .push-icon {
+    font-size: 0.9rem;
+  }
+
+  /* ── Forecast column — hide on mobile (card layout has no room) ── */
+  .ops-forecast-col {
+    display: none;
+  }
+
+  /* ── EFFIS toggle — shrink for mobile overlay ── */
+  .map-effis-toggle {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+
+  /* ── History chart ── */
+  .history-chart {
+    height: 72px;
+  }
+
+  .history-chart-legend {
+    font-size: 0.66rem;
+    gap: 6px;
   }
 }
 
