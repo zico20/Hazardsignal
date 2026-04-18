@@ -31,22 +31,21 @@ jobs:
             echo "worker=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Setup SSH
-        env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$VPS_SSH_KEY" | base64 -d > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+      - name: Load SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
       - name: Deploy to VPS
         env:
           DEPLOY_WEB: ${{ steps.changes.outputs.web }}
           DEPLOY_WORKER: ${{ steps.changes.outputs.worker }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} bash << 'ENDSSH'
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            DEPLOY_WEB="$DEPLOY_WEB" DEPLOY_WORKER="$DEPLOY_WORKER" \
+            bash -s << 'ENDSSH'
           set -e
           cd /opt/fire-risk/current
 
