@@ -1,6 +1,7 @@
 // HazardSignal Worker — v2
 import crypto from "node:crypto";
 import http from "node:http";
+import { spawn } from "node:child_process";
 import { loadRootEnv } from "./loadEnv.js";
 import { exportOperationalAssets } from "./earthEngine.js";
 import { runDaily } from "./runDaily.js";
@@ -182,6 +183,76 @@ const server = http.createServer(async (req, res) => {
         error: error.message
       });
     }
+    return;
+  }
+
+  if (req.method === "POST" && url.pathname === "/webhook/github") {
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = Buffer.concat(chunks);
+      const webhookSecret = process.env.GITHUB_WEBHOOK_SECRET || "";
+
+      if (webhookSecret) {
+        const sig = req.headers["x-hub-signature-256"] || "";
+        const expected = "sha256=" + crypto.createHmac("sha256", webhookSecret).update(body).digest("hex");
+        const sigBuf = Buffer.from(sig);
+        const expBuf = Buffer.from(expected);
+        const valid = sigBuf.length === expBuf.length && crypto.timingSafeEqual(sigBuf, expBuf);
+        if (!valid) {
+          sendJson(res, 401, { ok: false, error: "Invalid signature" });
+          return;
+        }
+      }
+
+      const event = req.headers["x-github-event"] || "";
+      if (event !== "push") {
+        sendJson(res, 200, { ok: true, skipped: true, reason: "not a push event" });
+        return;
+      }
+
+      let payload;
+      try {
+        payload = JSON.parse(body.toString("utf8"));
+      } catch {
+        sendJson(res, 400, { ok: false, error: "Invalid JSON" });
+        return;
+      }
+
+      if (payload.ref !== "refs/heads/main") {
+        sendJson(res, 200, { ok: true, skipped: true, reason: "not main branch" });
+        return;
+      }
+
+      const changedFiles = (payload.commits || []).flatMap((c) => [
+        ...(c.added || []),
+        ...(c.modified || []),
+        ...(c.removed || [])
+      ]);
+
+      const deployWeb = changedFiles.some((f) => f.startsWith("apps/web/"));
+      const deployWorker = changedFiles.some(
+        (f) => f.startsWith("services/worker/") || f === ".env.example"
+      );
+
+      sendJson(res, 200, { ok: true, deployWeb, deployWorker });
+
+      const scriptArgs = [];
+      if (deployWeb) scriptArgs.push("--web");
+      if (deployWorker) scriptArgs.push("--worker");
+
+      const child = spawn("/opt/fire-risk/current/scripts/vps-deploy.sh", scriptArgs, {
+        detached: true,
+        stdio: "pipe"
+      });
+      child.stdout.on("data", (d) => process.stdout.write(`[deploy] ${d}`));
+      child.stderr.on("data", (d) => process.stderr.write(`[deploy] ${d}`));
+      child.on("exit", (code) => {
+        if (code !== 0) process.stderr.write(`[deploy] exited with code ${code}\n`);
+        else process.stdout.write("[deploy] completed successfully\n");
+      });
+      child.unref();
+    });
     return;
   }
 
