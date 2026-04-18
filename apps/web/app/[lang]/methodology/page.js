@@ -1,6 +1,4 @@
-﻿import Link from "next/link";
-import LocaleSwitch from "../../../components/LocaleSwitch";
-import StickyMissionStrip from "../../../components/StickyMissionStrip";
+﻿import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
 import { getActiveFireDaily, getAlertEvents, getLatestRun } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
@@ -30,20 +28,8 @@ export default async function MethodologyPage({ params }) {
             <h1>{messages.methodology.title}</h1>
             <p>{messages.methodology.intro}</p>
             <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
-
-            <div className="topnav public-topnav">
-              <Link href={"/" + locale}>{messages.nav.dashboard}</Link>
-              <Link className="secondary" href={"/" + locale + "/alerts"}>
-                {messages.nav.alerts}
-              </Link>
-              <Link className="secondary" href={"/" + locale + "/methodology"}>
-                {messages.nav.methodology}
-              </Link>
-            </div>
           </div>
         </div>
-
-        <LocaleSwitch locale={locale} path="/methodology" locales={messages.locales} className="public-locale-switch" />
       </header>
 
       <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />

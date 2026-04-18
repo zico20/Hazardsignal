@@ -1,8 +1,6 @@
 ﻿import Link from "next/link";
-import LocaleSwitch from "../../../components/LocaleSwitch";
 import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
-import TelegramSubscribePanel from "../../../components/TelegramSubscribePanel";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
 import { formatPercent, formatProb, riskBadgeTone } from "../../../lib/format";
 import { getMessages, localizeSeverity, normalizeLocale } from "../../../lib/i18n";
@@ -32,28 +30,8 @@ export default async function AlertsPage({ params }) {
             <h1>{messages.alerts.title}</h1>
             <p>{messages.alerts.intro}</p>
             <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
-
-            <div className="topnav public-topnav">
-              <Link href={"/" + locale}>{messages.nav.dashboard}</Link>
-              <Link className="secondary" href={"/" + locale + "/alerts"}>
-                {messages.nav.alerts}
-              </Link>
-              <Link className="secondary" href={"/" + locale + "/methodology"}>
-                {messages.nav.methodology}
-              </Link>
-            </div>
           </div>
-
-          <TelegramSubscribePanel
-            messages={messages}
-            title={messages.alerts.subscribeTitle}
-            body={messages.alerts.subscribeBody}
-            compact
-            buttonOnly
-          />
         </div>
-
-        <LocaleSwitch locale={locale} path="/alerts" locales={messages.locales} className="public-locale-switch" />
       </header>
 
       <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />
