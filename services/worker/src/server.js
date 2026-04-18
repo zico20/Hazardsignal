@@ -1,3 +1,4 @@
+// HazardSignal Worker — v2
 import crypto from "node:crypto";
 import http from "node:http";
 import { loadRootEnv } from "./loadEnv.js";
