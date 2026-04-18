@@ -1,4 +1,4 @@
-// HazardSignal Worker — v2
+// HazardSignal Worker — v3
 import crypto from "node:crypto";
 import http from "node:http";
 import { spawn } from "node:child_process";
