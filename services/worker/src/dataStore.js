@@ -356,7 +356,7 @@ async function writeCollectionToSupabase(key, data) {
         throw new Error("Cannot write districtRiskDaily without an existing latest run.");
       }
       const rows = ensureArray(data).map((row) => {
-        const { record_id, created_at, ...rest } = row;
+        const { record_id, created_at, forecast_date, forecast_max_fire_prob, ...rest } = row;
         return {
           ...rest,
           run_id: latestRun.run_id
