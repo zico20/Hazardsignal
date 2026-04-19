@@ -150,7 +150,7 @@ export default function DesktopHeroV2({
           </span>
           <h1 className="dhv2-wordmark">
             <span className="dhv2-word-primary">Hazard</span>
-            <em className="dhv2-word-accent">Signal</em>
+            <span className="dhv2-word-accent">Signal</span>
           </h1>
           <p className="dhv2-subtitle">
             Daily wildfire signals for Antalya with a mobile-first operational view.
