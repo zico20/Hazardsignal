@@ -3351,7 +3351,6 @@ form,
   .shell {
     position: relative;
     z-index: 1;
-    padding-top: 72px;
   }
 
   /* Hero gets a subtle radial glow */
@@ -3439,7 +3438,7 @@ form,
 
   /* ── 1. Shell padding – single source of truth ── */
   .shell {
-    padding: 72px 14px 110px !important;
+    padding: 18px 14px 110px !important;
   }
 
   /* ── 2. Hide desktop nav elements – already in bottom nav ── */
