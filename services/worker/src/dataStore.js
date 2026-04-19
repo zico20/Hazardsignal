@@ -17,6 +17,8 @@ const FILES = {
   weatherData: "weather-data.json"
 };
 
+const LOCAL_ONLY_COLLECTIONS = new Set(["weatherData"]);
+
 const DEFAULT_ALERT_RULES = {
   ruleset_id: "default",
   probability_watch_min: 0.55,
@@ -468,7 +470,7 @@ async function writeCollectionToSupabase(key, data) {
 }
 
 export async function readCollection(key) {
-  if (!useSupabase()) {
+  if (!useSupabase() || LOCAL_ONLY_COLLECTIONS.has(key)) {
     return loadLocalFallbackAndMirror(FILES[key]);
   }
 
@@ -483,7 +485,7 @@ export async function readCollection(key) {
 }
 
 export async function writeCollection(key, data) {
-  if (!useSupabase()) {
+  if (!useSupabase() || LOCAL_ONLY_COLLECTIONS.has(key)) {
     await writeJsonFile(FILES[key], data);
     await mirrorRuntimeCache(FILES[key], data);
     return data;
