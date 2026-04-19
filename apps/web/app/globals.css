@@ -4329,7 +4329,7 @@ form,
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 10px 14px;
+    padding: 10px 20px 10px 14px;
     border: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     border-radius: 14px;
@@ -4371,6 +4371,11 @@ form,
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  /* Give the EN locale breathing room — push Telegram + Alerts slightly left */
+  .topbar-actions > .hero-topbar-locale {
+    margin-inline-start: 16px;
   }
 
   .topbar-telegram-slot .subscribe-card,
@@ -4440,11 +4445,21 @@ form,
   }
 
   .topbar-actions .locale-trigger {
-    min-width: 46px;
+    min-width: 52px;
     min-height: 38px;
-    padding: 7px 14px;
+    padding: 7px 16px;
     border-radius: 999px;
     font-size: 0.82rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: none;
+  }
+
+  .topbar-actions .locale-trigger:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
   }
 }
 
