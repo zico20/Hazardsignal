@@ -4,23 +4,29 @@ import TelegramSubscribePanel from "./TelegramSubscribePanel";
 import PushSubscribeButton from "./PushSubscribeButton";
 
 export default function PublicTopNav({ locale, messages, currentPath = "/" }) {
-  return (
-    <div className="hero-topbar">
-      <div className="hero-topbar-left">
-        <div className="topnav public-topnav">
-          <Link href={"/" + locale}>{messages.nav.dashboard}</Link>
-          <Link className="secondary" href={"/" + locale + "/alerts"}>
-            {messages.nav.alerts}
-          </Link>
-          <Link className="secondary" href={"/" + locale + "/map"}>
-            {messages.nav.map || "Map"}
-          </Link>
-          <Link className="secondary" href={"/" + locale + "/methodology"}>
-            {messages.nav.methodology}
-          </Link>
-        </div>
+  const links = [
+    { href: `/${locale}`, label: messages.nav.dashboard, match: "/" },
+    { href: `/${locale}/alerts`, label: messages.nav.alerts, match: "/alerts" },
+    { href: `/${locale}/map`, label: messages.nav.map || "Map", match: "/map" },
+    { href: `/${locale}/methodology`, label: messages.nav.methodology, match: "/methodology" }
+  ];
 
-        <div className="hero-topbar-telegram">
+  return (
+    <div className="hero-topbar topbar-pill">
+      <nav className="topbar-nav">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={["topbar-link", currentPath === link.match ? "active" : ""].filter(Boolean).join(" ")}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="topbar-actions">
+        <div className="topbar-telegram-slot">
           <TelegramSubscribePanel
             messages={messages}
             title={messages.home.subscriptionTitle}
@@ -28,16 +34,15 @@ export default function PublicTopNav({ locale, messages, currentPath = "/" }) {
             buttonOnly
             compact
           />
-          <PushSubscribeButton />
         </div>
+        <PushSubscribeButton />
+        <LocaleSwitch
+          locale={locale}
+          path={currentPath}
+          locales={messages.locales}
+          className="public-locale-switch hero-topbar-locale"
+        />
       </div>
-
-      <LocaleSwitch
-        locale={locale}
-        path={currentPath}
-        locales={messages.locales}
-        className="public-locale-switch hero-topbar-locale"
-      />
     </div>
   );
 }

@@ -4313,3 +4313,563 @@ form,
 .map-legend-card {
   z-index: 480;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TOPBAR PILL STYLE (desktop)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 761px) {
+  /* Remove the orange gradient leak from masthead::before */
+  .masthead::before {
+    display: none !important;
+  }
+
+  .hero-topbar.topbar-pill {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(13, 17, 23, 0.7);
+    margin-bottom: 24px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .topbar-link {
+    padding: 8px 16px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 150ms ease, color 150ms ease;
+    border: 0;
+  }
+
+  .topbar-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .topbar-link.active {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topbar-telegram-slot .subscribe-card,
+  .topbar-telegram-slot .subscribe-minimal {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  .topbar-telegram-slot .subscribe-minimal .button,
+  .topbar-telegram-slot .button.telegram {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-height: 38px;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    white-space: nowrap;
+  }
+
+  .topbar-telegram-slot .button.telegram:hover {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  }
+
+  /* Push button: green when active (Alerts On) */
+  .topbar-actions .push-subscribe-btn {
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-height: 38px;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .topbar-actions .push-subscribe-btn.push-active {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.35);
+    color: #86efac;
+  }
+
+  .topbar-actions .push-subscribe-btn.push-active .push-icon {
+    content: "";
+    font-size: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+  }
+
+  /* Locale EN pill compact */
+  .topbar-actions .hero-topbar-locale {
+    position: relative !important;
+    justify-self: unset;
+  }
+
+  .topbar-actions .locale-trigger {
+    min-width: 46px;
+    min-height: 38px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DESKTOP HERO V2
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.dhv2-wrap {
+  display: none;
+}
+
+@media (min-width: 761px) {
+  .dhv2-wrap {
+    display: block;
+    --dhv2-surface: rgba(13, 17, 23, 0.7);
+    --dhv2-surface-2: rgba(22, 27, 34, 0.55);
+    --dhv2-border: rgba(255, 255, 255, 0.08);
+    --dhv2-text: #F5F3EF;
+    --dhv2-text-muted: rgba(245, 243, 239, 0.62);
+    --dhv2-text-dim: rgba(245, 243, 239, 0.38);
+    --dhv2-accent: #FF8A3D;
+  }
+
+  /* Hide legacy desktop hero content on desktop when V2 is active */
+  .home-shell .home-hero-mobile-only {
+    display: none;
+  }
+
+  /* Top row: brand on left, location+weather on right */
+  .dhv2-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 20px;
+  }
+
+  .dhv2-brand { display: flex; flex-direction: column; gap: 10px; }
+
+  .dhv2-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 107, 43, 0.08);
+    border: 1px solid rgba(255, 107, 43, 0.25);
+    color: #FF8A3D;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    align-self: flex-start;
+  }
+
+  .dhv2-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FF8A3D;
+    box-shadow: 0 0 8px rgba(255, 138, 61, 0.7);
+  }
+
+  .dhv2-wordmark {
+    margin: 4px 0 0;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    color: #F5F3EF;
+  }
+
+  .dhv2-word-primary { color: #F5F3EF; }
+
+  .dhv2-word-accent {
+    font-style: italic;
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFB366 0%, #FF6B2B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dhv2-subtitle {
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+    color: var(--dhv2-text-muted);
+    max-width: 460px;
+  }
+
+  .dhv2-top-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .dhv2-loc-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--dhv2-surface);
+    border: 1px solid var(--dhv2-border);
+    font-size: 0.82rem;
+    color: var(--dhv2-text);
+  }
+
+  .dhv2-loc-pin { font-size: 0.85rem; }
+  .dhv2-loc-name { font-weight: 600; }
+  .dhv2-loc-sep { color: var(--dhv2-text-dim); }
+  .dhv2-loc-coord { color: var(--dhv2-text-muted); font-family: ui-monospace, monospace; font-size: 0.76rem; }
+
+  .dhv2-wtiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  .dhv2-wt {
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--dhv2-surface);
+    border: 1px solid var(--dhv2-border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dhv2-wt-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--dhv2-text-dim);
+  }
+
+  .dhv2-wt-value {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dhv2-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .dhv2-wt-unit {
+    font-size: 0.72rem;
+    color: var(--dhv2-text-muted);
+    font-weight: 400;
+    margin-inline-start: 2px;
+  }
+
+  /* Middle row: mission card + outlook card */
+  .dhv2-mid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .dhv2-mission {
+    position: relative;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--dhv2-surface);
+    border: 1px solid var(--dhv2-border);
+    overflow: hidden;
+  }
+
+  .dhv2-mission::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 100% at 30% 100%, rgba(255, 107, 43, 0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .dhv2-mission-monitoring::before {
+    background: radial-gradient(ellipse 70% 100% at 30% 100%, rgba(34, 197, 94, 0.12), transparent 60%);
+  }
+
+  .dhv2-mission-incident::before {
+    background: radial-gradient(ellipse 70% 100% at 30% 100%, rgba(239, 68, 68, 0.18), transparent 60%);
+  }
+
+  .dhv2-mission-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dhv2-tabs { display: flex; gap: 6px; }
+
+  .dhv2-tab {
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--dhv2-text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+  }
+
+  .dhv2-tab.active {
+    color: #3FB066;
+    background: rgba(63, 176, 102, 0.1);
+    border-color: rgba(63, 176, 102, 0.3);
+  }
+
+  .dhv2-mission-escalation .dhv2-tab.active {
+    color: #FF8A3D;
+    background: rgba(255, 138, 61, 0.1);
+    border-color: rgba(255, 138, 61, 0.3);
+  }
+
+  .dhv2-mission-incident .dhv2-tab.active {
+    color: #FF4A2E;
+    background: rgba(255, 74, 46, 0.1);
+    border-color: rgba(255, 74, 46, 0.3);
+  }
+
+  .dhv2-mission-mode {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--dhv2-text-dim);
+  }
+
+  .dhv2-mission-body {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dhv2-gauge-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .dhv2-gauge-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dhv2-gauge-value {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 2.6rem;
+    font-weight: 500;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .dhv2-gauge-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dhv2-text-dim);
+    margin-top: 3px;
+  }
+
+  .dhv2-mission-text { flex: 1; min-width: 0; }
+
+  .dhv2-mission-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--dhv2-text);
+  }
+
+  .dhv2-mission-desc {
+    margin: 6px 0 12px;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--dhv2-text-muted);
+  }
+
+  .dhv2-focus-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 13px;
+    border-radius: 999px;
+    background: rgba(255, 107, 43, 0.1);
+    border: 1px solid rgba(255, 107, 43, 0.3);
+    color: #FF8A3D;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .dhv2-focus-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FF8A3D;
+    box-shadow: 0 0 8px rgba(255, 138, 61, 0.7);
+  }
+
+  /* Outlook card */
+  .dhv2-outlook {
+    padding: 18px 20px;
+    border-radius: 20px;
+    background: var(--dhv2-surface);
+    border: 1px solid var(--dhv2-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .dhv2-outlook-head {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--dhv2-text-dim);
+    margin-bottom: 10px;
+  }
+
+  .dhv2-orow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--dhv2-border);
+  }
+  .dhv2-orow:last-child { border-bottom: 0; }
+
+  .dhv2-orow-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dhv2-text);
+  }
+
+  .dhv2-orow-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dhv2-text-dim);
+    margin-top: 2px;
+  }
+
+  .dhv2-orow-value {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--dhv2-text);
+  }
+
+  .dhv2-orow-value.tone-up { color: #FF8A3D; }
+  .dhv2-orow-value.tone-down { color: #6FD28A; }
+
+  /* Bottom stats tiles */
+  .dhv2-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dhv2-stile {
+    position: relative;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: var(--dhv2-surface);
+    border: 1px solid var(--dhv2-border);
+    min-height: 108px;
+    overflow: hidden;
+  }
+
+  .dhv2-stile-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--dhv2-text-dim);
+    margin-bottom: 8px;
+  }
+
+  .dhv2-stile-value {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--dhv2-text);
+  }
+
+  .dhv2-stile-unit {
+    font-size: 1.1rem;
+    color: var(--dhv2-text-muted);
+    margin-inline-start: 2px;
+  }
+
+  .dhv2-stile-sub {
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: var(--dhv2-text-muted);
+  }
+
+  .dhv2-stile-spark {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    opacity: 0.7;
+  }
+
+  .dhv2-spark-svg { display: block; }
+
+  /* Hide the legacy desktop hero details completely on desktop */
+  .desktop-hero-details { display: none !important; }
+}
+
+/* Keep mobile view intact — hide DesktopHeroV2 */
+@media (max-width: 760px) {
+  .dhv2-wrap { display: none !important; }
+}

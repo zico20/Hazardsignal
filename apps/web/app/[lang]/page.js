@@ -11,6 +11,7 @@ import PushSubscribeButton from "../../components/PushSubscribeButton";
 import WeatherStrip from "../../components/WeatherStrip";
 import MobileHeroCard from "../../components/MobileHeroCard";
 import PublicTopNav from "../../components/PublicTopNav";
+import DesktopHeroV2 from "../../components/DesktopHeroV2";
 import {
   getActiveFireDaily,
   getAlertEvents,
@@ -84,60 +85,40 @@ export default async function DashboardPage({ params }) {
       <header className="masthead mission-header">
         <PublicTopNav locale={locale} messages={messages} currentPath="/" />
 
-        <div className="hero-grid hero-grid-dashboard home-no-map">
-          <div className="hero-copy">
-            <span className="eyebrow hero-eyebrow">{messages.home.eyebrow}</span>
-            <h1>{messages.appName}</h1>
-
-            <MobileHeroCard
-              missionState={missionState}
-              missionTitle={missionTitle}
-              focusLabel={focusLabel}
-              criticalCount={criticalDistricts}
-              hotspotCount={activeFireDistricts}
-              peakProbability={peakProbability}
-              highRiskArea={highestArea}
-              runDate={runDate}
-              districts={districts}
-              updatedAt={latestRun?.finished_at || latestRun?.started_at}
-              weather={weather}
-            />
-
-            <div className="desktop-hero-details">
-              <p>{messages.home.intro}</p>
-
-              <WeatherStrip weather={weather} />
-              <div className="hero-signal-row">
-                <span className="signal-pill"><MicroIcon name="calendar" /><span>{messages.home.lastRun}: {runDate}</span></span>
-                <span className="signal-pill"><MicroIcon name="flame" /><span>{messages.home.hotspots}: {activeFireDistricts}</span></span>
-                <span className="signal-pill"><MicroIcon name="alert" /><span>{messages.home.criticalDistricts}: {criticalDistricts}</span></span>
-                <LastUpdatedBadge timestamp={latestRun?.finished_at || latestRun?.started_at} />
-              </div>
-
-              <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
-
-              <section className="hero-stats compact-stats">
-                <article className="stat-card stat-card-compact">
-                  <div className="stat-label">{messages.home.lastRun}</div>
-                  <div className="stat-value stat-value-compact">{runDate}</div>
-                </article>
-                <article className="stat-card stat-card-compact">
-                  <div className="stat-label">{messages.home.threshold}</div>
-                  <div className="stat-value stat-value-compact">{selectedThreshold}</div>
-                </article>
-                <article className="stat-card stat-card-compact">
-                  <div className="stat-label">{messages.home.criticalDistricts}</div>
-                  <div className="stat-value stat-value-compact">{criticalDistricts}</div>
-                </article>
-                <article className="stat-card stat-card-compact">
-                  <div className="stat-label">{messages.home.activeFireDistricts}</div>
-                  <div className="stat-value stat-value-compact">{activeFireDistricts}</div>
-                </article>
-              </section>
-            </div>
-          </div>
-
+        <div className="home-hero-mobile-only">
+          <span className="eyebrow hero-eyebrow">{messages.home.eyebrow}</span>
+          <h1>{messages.appName}</h1>
+          <MobileHeroCard
+            missionState={missionState}
+            missionTitle={missionTitle}
+            focusLabel={focusLabel}
+            criticalCount={criticalDistricts}
+            hotspotCount={activeFireDistricts}
+            peakProbability={peakProbability}
+            highRiskArea={highestArea}
+            runDate={runDate}
+            districts={districts}
+            updatedAt={latestRun?.finished_at || latestRun?.started_at}
+            weather={weather}
+          />
         </div>
+
+        <DesktopHeroV2
+          missionState={missionState}
+          missionTitle={missionTitle}
+          missionBody={messages.mission?.states?.[missionState]?.body}
+          focusLabel={focusLabel}
+          peakProbability={peakProbability}
+          criticalDistricts={criticalDistricts}
+          activeFireDistricts={activeFireDistricts}
+          hotspotCount={fires.length}
+          selectedThresholdRaw={latestRun?.selected_threshold}
+          runDate={runDate}
+          latestRun={latestRun}
+          weather={weather}
+          districts={districts}
+          totalDistricts={districts.length || 19}
+        />
       </header>
 
       <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />
