@@ -1,6 +1,7 @@
 import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
 import RiskMapShell from "../../../components/RiskMapShell";
+import PublicTopNav from "../../../components/PublicTopNav";
 import {
   getActiveFireDaily,
   getAlertEvents,
@@ -47,6 +48,8 @@ export default async function MapPage({ params }) {
   return (
     <div className={shellClass} dir={messages.dir}>
       <header className="masthead mission-header">
+        <PublicTopNav locale={locale} messages={messages} currentPath="/map" />
+
         <div className="hero-grid hero-grid-compact map-page-hero">
           <div className="hero-copy">
             <span className="eyebrow">{messages.home.mapTitle}</span>

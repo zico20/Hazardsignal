@@ -2,6 +2,7 @@
 import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
 import TelegramSubscribePanel from "../../../components/TelegramSubscribePanel";
+import PublicTopNav from "../../../components/PublicTopNav";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
 import { formatPercent, formatProb, riskBadgeTone } from "../../../lib/format";
 import { getMessages, localizeSeverity, normalizeLocale } from "../../../lib/i18n";
@@ -45,6 +46,8 @@ export default async function AlertsPage({ params }) {
   return (
     <div className={shellClass} dir={messages.dir}>
       <header className="masthead mission-header">
+        <PublicTopNav locale={locale} messages={messages} currentPath="/alerts" />
+
         <div className="hero-grid hero-grid-compact">
           <div className="hero-copy">
             <span className="eyebrow">{messages.alerts.eyebrow}</span>

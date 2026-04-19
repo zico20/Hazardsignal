@@ -4237,3 +4237,79 @@ form,
     animation: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DESKTOP POLISH PASS
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Desktop: hide mobile bottom nav */
+@media (min-width: 761px) {
+  .mobile-bottom-nav-wrap,
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+/* Hero topbar: Telegram + Push buttons side-by-side (no overlap) */
+.hero-topbar-telegram {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Home page with no map: hero copy uses full width */
+.home-no-map {
+  display: block !important;
+  grid-template-columns: 1fr !important;
+}
+
+.home-no-map .hero-copy {
+  max-width: 820px;
+}
+
+/* Zoom control: bottom-left, well-styled */
+.leaflet-control-zoom {
+  margin-bottom: 20px !important;
+  margin-left: 20px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.leaflet-bottom.leaflet-left .leaflet-control-zoom {
+  border: 1px solid var(--line-strong);
+}
+
+.leaflet-control-zoom a {
+  background: rgba(18, 18, 23, 0.92) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(30, 30, 38, 0.98) !important;
+  color: var(--accent) !important;
+}
+
+/* Map overlay chips — prevent overlap with proper wrapping/gap */
+.map-overlay-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px !important;
+  align-items: center;
+  max-width: calc(100% - 180px);
+}
+
+.map-overlay-top .map-chip,
+.map-overlay-top .map-effis-toggle {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Signal legend: already desktop-styled above; keep as is but ensure no overlap */
+.map-legend-card {
+  z-index: 480;
+}

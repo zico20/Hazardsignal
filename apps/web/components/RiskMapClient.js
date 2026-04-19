@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { CircleMarker, MapContainer, Popup, TileLayer, WMSTileLayer } from "react-leaflet";
+import { CircleMarker, MapContainer, Popup, TileLayer, WMSTileLayer, ZoomControl } from "react-leaflet";
 import { formatPercent, formatProb, riskBadgeTone, severityColor } from "../lib/format";
 import { localizeRiskClass } from "../lib/i18n";
 
@@ -39,7 +39,8 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
 
   return (
     <div className={["map-shell", "ops-map-shell", "mission-map", "mission-" + missionState].join(" ")}>
-      <MapContainer center={DEFAULT_CENTER} zoom={8} scrollWheelZoom style={{ minHeight: 520 }} className="ops-map">
+      <MapContainer center={DEFAULT_CENTER} zoom={8} scrollWheelZoom zoomControl={false} style={{ minHeight: 520 }} className="ops-map">
+        <ZoomControl position="bottomleft" />
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

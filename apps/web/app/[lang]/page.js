@@ -10,6 +10,7 @@ import LastUpdatedBadge from "../../components/LastUpdatedBadge";
 import PushSubscribeButton from "../../components/PushSubscribeButton";
 import WeatherStrip from "../../components/WeatherStrip";
 import MobileHeroCard from "../../components/MobileHeroCard";
+import PublicTopNav from "../../components/PublicTopNav";
 import {
   getActiveFireDaily,
   getAlertEvents,
@@ -81,37 +82,9 @@ export default async function DashboardPage({ params }) {
   return (
     <div className={shellClass} dir={messages.dir}>
       <header className="masthead mission-header">
-        <div className="hero-topbar">
-          <div className="hero-topbar-left">
-            <div className="topnav public-topnav">
-              <Link href={"/" + locale}>{messages.nav.dashboard}</Link>
-              <Link className="secondary" href={"/" + locale + "/alerts"}>
-                {messages.nav.alerts}
-              </Link>
-              <Link className="secondary" href={"/" + locale + "/map"}>
-                {messages.nav.map || "Map"}
-              </Link>
-              <Link className="secondary" href={"/" + locale + "/methodology"}>
-                {messages.nav.methodology}
-              </Link>
-            </div>
+        <PublicTopNav locale={locale} messages={messages} currentPath="/" />
 
-            <div className="hero-topbar-telegram">
-              <TelegramSubscribePanel
-                messages={messages}
-                title={messages.home.subscriptionTitle}
-                body={messages.home.subscriptionBody}
-                buttonOnly
-                compact
-              />
-              <PushSubscribeButton />
-            </div>
-          </div>
-
-          <LocaleSwitch locale={locale} path="/" locales={messages.locales} className="public-locale-switch hero-topbar-locale" />
-        </div>
-
-        <div className="hero-grid hero-grid-dashboard">
+        <div className="hero-grid hero-grid-dashboard home-no-map">
           <div className="hero-copy">
             <span className="eyebrow hero-eyebrow">{messages.home.eyebrow}</span>
             <h1>{messages.appName}</h1>
@@ -164,9 +137,6 @@ export default async function DashboardPage({ params }) {
             </div>
           </div>
 
-          <div className="desktop-hero-side" id="operational-map">
-            <RiskMapShell districts={districts} fires={fires} messages={messages.map} locale={locale} missionState={missionState} />
-          </div>
         </div>
       </header>
 

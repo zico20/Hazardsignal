@@ -1,4 +1,5 @@
 ﻿import StickyMissionStrip from "../../../components/StickyMissionStrip";
+import PublicTopNav from "../../../components/PublicTopNav";
 import MissionStatus from "../../../components/MissionStatus";
 import { getActiveFireDaily, getAlertEvents, getLatestRun } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
@@ -22,6 +23,8 @@ export default async function MethodologyPage({ params }) {
   return (
     <div className={shellClass} dir={messages.dir}>
       <header className="masthead mission-header">
+        <PublicTopNav locale={locale} messages={messages} currentPath="/methodology" />
+
         <div className="hero-grid hero-grid-compact">
           <div className="hero-copy">
             <span className="eyebrow">{messages.methodology.eyebrow}</span>
