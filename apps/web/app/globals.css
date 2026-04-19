@@ -4467,33 +4467,45 @@ form,
     50%      { transform: scale(1.25); opacity: 0.75; }
   }
 
-  /* Locale EN pill compact */
-  .topbar-actions .hero-topbar-locale {
+  /* Locale EN pill — force out of absolute positioning and into flex flow */
+  .hero-topbar.topbar-pill .topbar-actions .hero-topbar-locale,
+  .hero-topbar.topbar-pill .topbar-actions .locale-dock,
+  .hero-topbar.topbar-pill .topbar-actions .public-locale-switch {
     position: relative !important;
-    justify-self: unset;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    inset: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 38px !important;
+    z-index: 5;
+    margin-inline-start: 16px;
   }
 
-  .topbar-actions .locale-trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 58px;
-    height: 38px;
-    min-height: 38px;
-    padding: 0 18px;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.85);
-    box-shadow: none;
-    line-height: 1;
+  .hero-topbar.topbar-pill .topbar-actions .locale-trigger {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 58px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 18px !important;
+    border-radius: 999px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: none !important;
+    line-height: 1 !important;
+    margin: 0 !important;
   }
 
-  .topbar-actions .locale-trigger:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+  .hero-topbar.topbar-pill .topbar-actions .locale-trigger:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
   }
 }
 
