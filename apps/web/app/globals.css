@@ -4667,6 +4667,9 @@ form,
     background: var(--dhv2-surface);
     border: 1px solid var(--dhv2-border);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .dhv2-mission::before {
@@ -4738,6 +4741,7 @@ form,
     gap: 20px;
     position: relative;
     z-index: 1;
+    flex: 1;
   }
 
   .dhv2-gauge-wrap {
@@ -4756,11 +4760,20 @@ form,
 
   .dhv2-gauge-value {
     font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
-    font-size: 2.6rem;
+    font-size: 1.9rem;
     font-weight: 500;
-    letter-spacing: -2px;
+    letter-spacing: -1px;
     line-height: 1;
     color: #fff;
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  .dhv2-gauge-pct {
+    font-size: 0.95rem;
+    color: var(--dhv2-text-muted);
+    margin-inline-start: 1px;
+    font-weight: 500;
   }
 
   .dhv2-gauge-label {
@@ -4807,6 +4820,38 @@ form,
     border-radius: 50%;
     background: #FF8A3D;
     box-shadow: 0 0 8px rgba(255, 138, 61, 0.7);
+  }
+
+  /* Mission card footer — real-data meta row that fills the bottom */
+  .dhv2-mission-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--dhv2-border);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--dhv2-text-muted);
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+  }
+
+  .dhv2-foot-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dhv2-foot-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 138, 61, 0.75);
+  }
+
+  .dhv2-foot-sep {
+    color: var(--dhv2-text-dim);
   }
 
   /* Outlook card */

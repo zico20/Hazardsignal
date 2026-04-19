@@ -86,6 +86,7 @@ export default function DesktopHeroV2({
   missionBody,
   focusLabel,
   peakProbability = 0,
+  highRiskArea = 0,
   criticalDistricts = 0,
   activeFireDistricts = 0,
   hotspotCount = 0,
@@ -107,9 +108,9 @@ export default function DesktopHeroV2({
     return () => clearInterval(id);
   }, [latestRun]);
 
-  const fwi = Math.round((peakProbability ?? 0) * 100);
   const riskKey = pickRisk(peakProbability);
   const thresholdPct = Math.round((selectedThresholdRaw ?? 0.5) * 100);
+  const areaPct = Math.round((highRiskArea ?? 0) * 10) / 10;
 
   const tomorrowMod = weather?.tomorrow?.risk_modifier;
   let tomorrowLabel = "-";
@@ -195,10 +196,10 @@ export default function DesktopHeroV2({
 
           <div className="dhv2-mission-body">
             <div className="dhv2-gauge-wrap">
-              <RiskGauge riskKey={riskKey} size={140} thickness={8} score={fwi} />
+              <RiskGauge riskKey={riskKey} size={140} thickness={8} score={areaPct} />
               <div className="dhv2-gauge-center">
-                <div className="dhv2-gauge-value">{fwi}</div>
-                <div className="dhv2-gauge-label">RISK INDEX</div>
+                <div className="dhv2-gauge-value">{areaPct}<span className="dhv2-gauge-pct">%</span></div>
+                <div className="dhv2-gauge-label">HIGH-RISK AREA</div>
               </div>
             </div>
 
@@ -211,6 +212,21 @@ export default function DesktopHeroV2({
                   Priority focus · {focusLabel}
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="dhv2-mission-foot">
+            <div className="dhv2-foot-item">
+              <span className="dhv2-foot-dot" />
+              Monitoring {totalDistricts} districts
+            </div>
+            <div className="dhv2-foot-sep">·</div>
+            <div className="dhv2-foot-item">
+              Peak probability {Math.round((peakProbability ?? 0) * 100)}%
+            </div>
+            <div className="dhv2-foot-sep">·</div>
+            <div className="dhv2-foot-item">
+              Updated {timeAgo || "—"}
             </div>
           </div>
         </section>

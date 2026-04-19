@@ -109,6 +109,7 @@ export default async function DashboardPage({ params }) {
           missionBody={messages.mission?.states?.[missionState]?.body}
           focusLabel={focusLabel}
           peakProbability={peakProbability}
+          highRiskArea={highestArea}
           criticalDistricts={criticalDistricts}
           activeFireDistricts={activeFireDistricts}
           hotspotCount={fires.length}
