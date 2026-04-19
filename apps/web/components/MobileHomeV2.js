@@ -141,7 +141,7 @@ export default function MobileHomeV2({
       { key: "dryness", label: "Dryness",      value: dryness,                       unit: "%",    score: dryness / 100 },
       { key: "wind",    label: "Wind",         value: current.wind_speed_kmh ?? 0,   unit: "km/h", score: windScore },
       { key: "temp",    label: "Temperature",  value: current.temp_c ?? 0,           unit: "°",    score: tempScore },
-      { key: "tomorrow",label: "Tomorrow x",   value: (tomorrow?.risk_modifier ?? 1).toFixed(2), unit: "", score: forecastScore }
+      { key: "tomorrow",label: "Tomorrow",     value: (tomorrow?.risk_modifier ?? 1).toFixed(2), unit: "x",   score: forecastScore }
     ];
   }, [current, tomorrow]);
 
@@ -189,11 +189,10 @@ export default function MobileHomeV2({
       {/* Header */}
       <div className="hsv2-header">
         <div>
-          <div className="hsv2-eyebrow">Your Area</div>
+          <div className="hsv2-eyebrow">Top Risk · Antalya</div>
           <div className="hsv2-title">
             <span className="hsv2-pin">📍</span>{" "}
             {topDistrict?.district_name || "Antalya"}
-            <span className="hsv2-title-sub"> · Antalya</span>
           </div>
         </div>
         <Link href={`/${locale}/alerts`} className="hsv2-bell" aria-label="Alerts">
@@ -238,8 +237,8 @@ export default function MobileHomeV2({
               <div className="hsv2-cond-v">{current.wind_speed_kmh}km/h</div>
             </div>
             <div className="hsv2-cond">
-              <div className="hsv2-cond-dir">{current.wind_direction || "—"}</div>
-              <div className="hsv2-cond-v">dir</div>
+              <div className="hsv2-cond-icon">🧭</div>
+              <div className="hsv2-cond-v">{current.wind_direction || "—"}</div>
             </div>
           </div>
         )}

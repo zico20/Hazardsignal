@@ -82,7 +82,7 @@ export default async function DashboardPage({ params }) {
   return (
     <div className={shellClass} dir={messages.dir}>
       <MobileHomeV2
-        topDistrict={districts[0]}
+        topDistrict={[...districts].sort((a, b) => (b.max_fire_prob ?? 0) - (a.max_fire_prob ?? 0))[0] || districts[0]}
         weather={weather}
         fires={fires}
         districts={districts}

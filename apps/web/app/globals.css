@@ -4007,7 +4007,7 @@ form,
   .home-shell .section-grid.narrative-grid,
   .home-shell .section-grid.mobile-dashboard-sections,
   .home-shell .split.split-feed,
-  .home-shell .sticky-mission-strip {
+  .home-shell .mission-strip {
     display: none !important;
   }
 
@@ -4548,25 +4548,18 @@ form,
     letter-spacing: 0.5px;
   }
 
-  /* ── Alerts/Methodology/Map page cleanup: hide legacy content ── */
-  .hsv2-alerts ~ .masthead,
-  .hsv2-alerts ~ .panel,
-  .hsv2-alerts ~ .sticky-mission-strip,
-  .hsv2-method ~ .masthead,
-  .hsv2-method ~ .panel,
-  .hsv2-method ~ .sticky-mission-strip,
-  .hsv2-method ~ .methodology-grid,
-  .hsv2-method ~ section {
+  /* ── Aggressive hide: everything after .hsv2-screen in the shell ── */
+  .shell > .hsv2-screen ~ * {
     display: none !important;
   }
 
   /* Map page: tone the panel & overlay to V2 */
-  .shell.hsv2-map-shell .shell {
+  .shell.hsv2-map-shell {
     padding: 0 !important;
     background: #0A0D12;
   }
   .shell.hsv2-map-shell .masthead,
-  .shell.hsv2-map-shell .sticky-mission-strip {
+  .shell.hsv2-map-shell .mission-strip {
     display: none !important;
   }
   .shell.hsv2-map-shell .map-page-panel {
