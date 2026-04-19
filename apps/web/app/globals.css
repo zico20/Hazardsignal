@@ -3617,10 +3617,26 @@ form,
     padding: 18px 16px 20px !important;
   }
 
+  /* Force hero-grid to a single column so card spans full width */
+  .home-shell .hero-grid,
+  .home-shell .hero-grid-dashboard {
+    display: flex !important;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Hide redundant sticky mission strip (card already shows state) */
+  .home-shell .sticky-mission-strip,
+  .home-shell .mission-strip {
+    display: none !important;
+  }
+
   /* The card itself */
   .mobile-hero-card {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
     gap: 14px;
     padding: 20px 18px;
     border-radius: 20px;
@@ -3634,6 +3650,10 @@ form,
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
     position: relative;
     overflow: hidden;
+  }
+
+  .mhc-weather-value {
+    font-size: 0.72rem;
   }
 
   /* State-specific accent colors */
