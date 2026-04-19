@@ -1,6 +1,7 @@
 ﻿import Link from "next/link";
 import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
+import TelegramSubscribePanel from "../../../components/TelegramSubscribePanel";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
 import { formatPercent, formatProb, riskBadgeTone } from "../../../lib/format";
 import { getMessages, localizeSeverity, normalizeLocale } from "../../../lib/i18n";
@@ -17,6 +18,26 @@ export default async function AlertsPage({ params }) {
   ]);
 
   const rows = alerts.slice(0, 40);
+
+  function shortDate(iso) {
+    if (!iso) return "-";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "-";
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yy = String(d.getFullYear() % 100).padStart(2, "0");
+    return `${dd}-${mm}-${yy}`;
+  }
+
+  function peakTier(p) {
+    const v = Number(p ?? 0);
+    if (v >= 0.8) return "extreme";
+    if (v >= 0.6) return "very-high";
+    if (v >= 0.4) return "high";
+    if (v >= 0.2) return "moderate";
+    return "low";
+  }
+
   const missionState = deriveMissionState({ latestRun, alerts: rows });
   const focusLabel = rows[0]?.district_name || "";
   const shellClass = ["shell", "mission-shell", "mission-" + missionState, messages.dir === "rtl" ? "rtl" : ""].filter(Boolean).join(" ");
@@ -29,7 +50,18 @@ export default async function AlertsPage({ params }) {
             <span className="eyebrow">{messages.alerts.eyebrow}</span>
             <h1>{messages.alerts.title}</h1>
             <p>{messages.alerts.intro}</p>
-            <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
+            <div className="alerts-telegram-slot">
+              <TelegramSubscribePanel
+                messages={messages}
+                title={messages.alerts.subscribeTitle || messages.home.subscriptionTitle}
+                body={messages.alerts.subscribeBody || messages.home.subscriptionBody}
+                compact
+                buttonOnly
+              />
+            </div>
+            <div className="alerts-mission-wrap">
+              <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
+            </div>
           </div>
         </div>
       </header>
@@ -57,7 +89,7 @@ export default async function AlertsPage({ params }) {
               </thead>
               <tbody>
                 {rows.map((alert) => (
-                  <tr key={alert.alert_id}>
+                  <tr key={alert.alert_id} data-peak-tier={peakTier(alert.max_fire_prob)}>
                     <td data-label={messages.alerts.status}>
                       <div className={["badge", riskBadgeTone(alert.severity)].join(" ")}>
                         {localizeSeverity(alert.severity, locale)}
@@ -74,7 +106,7 @@ export default async function AlertsPage({ params }) {
                     <td className="ops-number" data-label={messages.alerts.highArea}>{formatPercent(alert.high_or_very_high_area_pct, locale)}</td>
                     <td className="ops-number" data-label={messages.alerts.hotspots}>{alert.hotspot_count_24h}</td>
                     <td data-label={messages.alerts.sent}>
-                      <span className="ops-timestamp">{alert.sent_at || "-"}</span>
+                      <span className="ops-timestamp">{shortDate(alert.sent_at)}</span>
                     </td>
                     <td data-label={messages.nav.dashboard}>
                       <Link href={"/" + locale + "/districts/" + alert.district_id} className="ops-link-button">

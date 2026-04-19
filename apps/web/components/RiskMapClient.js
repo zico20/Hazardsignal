@@ -30,11 +30,11 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
   const [showEffis, setShowEffis] = useState(false);
 
   const legendRows = [
-    { label: localizeRiskClass("Very High", locale), color: riskColor("Very High") },
-    { label: localizeRiskClass("High", locale), color: riskColor("High") },
-    { label: localizeRiskClass("Medium", locale), color: riskColor("Medium") },
-    { label: localizeRiskClass("Low", locale), color: riskColor("Low") },
-    { label: localizeRiskClass("Very Low", locale), color: riskColor("Very Low") }
+    { label: localizeRiskClass("Low", locale), short: "Low", color: riskColor("Low") },
+    { label: localizeRiskClass("Medium", locale), short: "Mod", color: riskColor("Medium") },
+    { label: localizeRiskClass("High", locale), short: "High", color: riskColor("High") },
+    { label: localizeRiskClass("Very High", locale), short: "V.High", color: riskColor("Very High") },
+    { label: "Fire", short: "Fire", color: "#ef4444", hotspot: true }
   ];
 
   return (
@@ -154,14 +154,14 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
         <div className="map-legend-list">
           {legendRows.map((entry) => (
             <div className="map-legend-row" key={entry.label}>
-              <span className="map-legend-swatch" style={{ backgroundColor: entry.color }} />
-              <span>{entry.label}</span>
+              <span
+                className={["map-legend-swatch", entry.hotspot ? "hotspot" : ""].filter(Boolean).join(" ")}
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="map-legend-full">{entry.label}</span>
+              <span className="map-legend-short">{entry.short}</span>
             </div>
           ))}
-          <div className="map-legend-row">
-            <span className="map-legend-swatch hotspot" />
-            <span>{t(messages, "activeFires", "Active fires (24h)")}</span>
-          </div>
         </div>
       </aside>
     </div>

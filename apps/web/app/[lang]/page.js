@@ -285,8 +285,11 @@ export default async function DashboardPage({ params }) {
                 </tr>
               </thead>
               <tbody>
-                {topDistricts.map((district, index) => (
-                  <tr key={district.district_id}>
+                {topDistricts.map((district, index) => {
+                  const p = district.max_fire_prob ?? 0;
+                  const tier = p >= 0.8 ? "extreme" : p >= 0.6 ? "very-high" : p >= 0.4 ? "high" : p >= 0.2 ? "moderate" : "low";
+                  return (
+                  <tr key={district.district_id} data-peak-tier={tier}>
                     <td data-label="#">
                       <span className="ops-index">{String(index + 1).padStart(2, "0")}</span>
                     </td>
@@ -326,7 +329,8 @@ export default async function DashboardPage({ params }) {
                       </td>
                     )}
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -1373,6 +1373,9 @@ button.secondary:hover {
   color: var(--ink);
 }
 
+.map-legend-short { display: none; }
+.map-legend-full { display: inline; }
+
 .map-legend-swatch {
   width: 10px;
   height: 10px;
@@ -3492,26 +3495,171 @@ form,
   .ops-mobile-feed tbody {
     width: 100%;
   }
+  /* Compact row-style cards (District leaderboard + Alert feed) */
   .ops-mobile-feed tr {
+    display: grid !important;
     width: 100%;
     box-sizing: border-box;
-    grid-template-columns: auto 1fr 1fr;
-    padding: 12px;
-    gap: 4px 8px;
+    grid-template-columns: 28px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 2px 10px;
+    padding: 11px 14px 11px 13px !important;
+    border: 1px solid var(--line) !important;
+    border-left-width: 3px !important;
+    border-left-color: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    background: rgba(20, 16, 24, 0.6) !important;
+    align-items: center;
+    margin-bottom: 8px;
   }
+
+  .ops-mobile-feed tr[data-peak-tier="extreme"]   { border-left-color: #ef4444 !important; }
+  .ops-mobile-feed tr[data-peak-tier="very-high"] { border-left-color: #ff4422 !important; }
+  .ops-mobile-feed tr[data-peak-tier="high"]      { border-left-color: #ff7a18 !important; }
+  .ops-mobile-feed tr[data-peak-tier="moderate"]  { border-left-color: #d4a820 !important; }
+  .ops-mobile-feed tr[data-peak-tier="low"]       { border-left-color: #3fb066 !important; }
+
   .ops-mobile-feed td {
+    display: block;
+    padding: 0 !important;
+    border: 0 !important;
     min-width: 0;
-    overflow-wrap: break-word;
-    word-break: break-word;
     font-size: 0.84rem;
-    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .ops-mobile-feed td::before {
-    font-size: 0.58rem;
+    display: none !important;
   }
-  /* Hide low-value columns on mobile cards */
-  .ops-mobile-feed td:nth-child(3),
-  .ops-mobile-feed td:nth-child(6) {
+
+  /* ─── HOME leaderboard: rank | name+area | peak ─── */
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(1) .ops-index {
+    background: transparent !important;
+    padding: 0 !important;
+    display: inline !important;
+    border: 0 !important;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(2) .ops-row-sub {
+    display: none;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(3) { display: none; }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(4)::after {
+    content: " high-risk";
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 400;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(5) {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    align-self: center;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: end;
+  }
+  .ops-mobile-feed:not(.ops-table-alerts) tr[data-peak-tier="extreme"]   td:nth-child(5) { color: #ff6a6a; }
+  .ops-mobile-feed:not(.ops-table-alerts) tr[data-peak-tier="very-high"] td:nth-child(5) { color: #ff7356; }
+  .ops-mobile-feed:not(.ops-table-alerts) tr[data-peak-tier="high"]      td:nth-child(5) { color: #ff9b4d; }
+  .ops-mobile-feed:not(.ops-table-alerts) tr[data-peak-tier="moderate"]  td:nth-child(5) { color: #e8c766; }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(6) { display: none; }
+  .ops-mobile-feed:not(.ops-table-alerts) td:nth-child(7) { display: none; }
+
+  /* ─── ALERTS feed: sev-dot | name+date | max-prob ─── */
+  .ops-mobile-feed.ops-table-alerts tr {
+    grid-template-columns: 16px 1fr auto;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(1) .badge {
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-size: 0 !important;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(1) .badge.critical { background: #ef4444 !important; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(1) .badge.warning  { background: #ff7a18 !important; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(1) .badge.watch    { background: #d4a820 !important; }
+
+  .ops-mobile-feed.ops-table-alerts td:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(2) .ops-row-sub { display: none; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(3) { display: none; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(4) {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    align-self: center;
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-align: end;
+  }
+  .ops-mobile-feed.ops-table-alerts tr[data-peak-tier="extreme"]   td:nth-child(4) { color: #ff6a6a; }
+  .ops-mobile-feed.ops-table-alerts tr[data-peak-tier="very-high"] td:nth-child(4) { color: #ff7356; }
+  .ops-mobile-feed.ops-table-alerts tr[data-peak-tier="high"]      td:nth-child(4) { color: #ff9b4d; }
+  .ops-mobile-feed.ops-table-alerts tr[data-peak-tier="moderate"]  td:nth-child(4) { color: #e8c766; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(5) { display: none; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(6) { display: none; }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(7) {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(7) .ops-timestamp {
+    font-size: 0.7rem;
+  }
+  .ops-mobile-feed.ops-table-alerts td:nth-child(8) { display: none; }
+
+  /* ─── Alerts page: Telegram button + mission wrap ─── */
+  .alerts-telegram-slot {
+    margin: 12px 0 8px;
+  }
+  .alerts-telegram-slot .subscribe-card,
+  .alerts-telegram-slot .telegram-panel,
+  .alerts-telegram-slot .button {
+    width: 100%;
+  }
+  .alerts-mission-wrap {
     display: none;
   }
 
@@ -3532,18 +3680,37 @@ form,
   }
   .map-legend-card {
     left: 8px !important;
+    right: 8px !important;
     bottom: 8px !important;
     top: auto !important;
-    right: auto !important;
-    padding: 8px 10px !important;
-    min-width: 110px !important;
+    padding: 7px 10px !important;
+    min-width: 0 !important;
+    width: auto;
+    border-radius: 10px !important;
   }
   .map-legend-title {
-    font-size: 0.58rem;
+    display: none;
+  }
+  .map-legend-list {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
   }
   .map-legend-row {
-    font-size: 0.72rem;
-    gap: 5px;
+    font-size: 0.66rem;
+    gap: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .map-legend-full { display: none; }
+  .map-legend-short { display: inline; }
+  .map-legend-swatch {
+    width: 8px !important;
+    height: 8px !important;
   }
   .leaflet-control-zoom {
     margin-top: 140px !important;
@@ -3606,15 +3773,18 @@ form,
     display: none;
   }
 
-  /* Scale down the h1 so the hero card takes center stage */
+  /* Bolder hero title with more breathing room */
   .masthead h1 {
-    font-size: 1.5rem !important;
-    font-weight: 800;
-    margin-bottom: 14px;
+    font-size: 2.15rem !important;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 10px 0 22px;
+    padding-top: 8px;
   }
 
   .masthead {
-    padding: 18px 16px 20px !important;
+    padding: 28px 22px 26px !important;
   }
 
   /* Force hero-grid to a single column so card spans full width */
