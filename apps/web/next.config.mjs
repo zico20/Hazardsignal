@@ -29,10 +29,17 @@ const nextConfig = {
   experimental: {
     externalDir: true
   },
-  // Leaflet & react-leaflet touch `window` at import time. Keep them
-  // outside the server bundle so Next.js dev doesn't choke generating
-  // a vendor chunk for them on the server.
-  serverExternalPackages: ["leaflet", "react-leaflet"],
+  // Keep these outside the server bundle so Next.js dev doesn't choke
+  // generating vendor chunks for them on the server.
+  // - leaflet/react-leaflet: touch `window` at import time
+  // - @supabase/supabase-js: hot-reload churn breaks the vendor chunk
+  // - react-spring-bottom-sheet: client-only, depends on react-spring
+  serverExternalPackages: [
+    "leaflet",
+    "react-leaflet",
+    "@supabase/supabase-js",
+    "react-spring-bottom-sheet"
+  ],
   poweredByHeader: false,
   async headers() {
     return [
