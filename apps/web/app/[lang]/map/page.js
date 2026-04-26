@@ -1,6 +1,7 @@
 import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
 import RiskMapShell from "../../../components/RiskMapShell";
+import MobileMapConsole from "../../../components/MobileMapConsole";
 import PublicTopNav from "../../../components/PublicTopNav";
 import {
   getActiveFireDaily,
@@ -45,39 +46,60 @@ export default async function MapPage({ params }) {
     { label: messages.home.maxProb, value: formatProb(districts.reduce((max, district) => Math.max(max, district.max_fire_prob ?? 0), 0), locale) }
   ];
 
+  const peakProbability = districts.reduce(
+    (max, district) => Math.max(max, district.max_fire_prob ?? 0),
+    0
+  );
+
   return (
     <div className={shellClass} dir={messages.dir}>
-      <header className="masthead mission-header">
-        <PublicTopNav locale={locale} messages={messages} currentPath="/map" />
+      <div className="m-route-mobile-only">
+        <MobileMapConsole
+          districts={districts}
+          fires={fires}
+          messages={messages}
+          locale={locale}
+          missionState={missionState}
+          criticalDistricts={latestRun?.critical_districts ?? 0}
+          activeFireDistricts={latestRun?.active_fire_districts ?? 0}
+          peakProbability={peakProbability}
+          runDate={latestRun?.run_date || "-"}
+        />
+      </div>
 
-        <div className="hero-grid hero-grid-compact map-page-hero">
-          <div className="hero-copy">
-            <span className="eyebrow">{messages.home.mapTitle}</span>
-            <h1>{messages.home.mapTitle}</h1>
-            <p>{messages.home.mapDesc}</p>
-            <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
+      <div className="m-route-desktop-only">
+        <header className="masthead mission-header">
+          <PublicTopNav locale={locale} messages={messages} currentPath="/map" />
+
+          <div className="hero-grid hero-grid-compact map-page-hero">
+            <div className="hero-copy">
+              <span className="eyebrow">{messages.home.mapTitle}</span>
+              <h1>{messages.home.mapTitle}</h1>
+              <p>{messages.home.mapDesc}</p>
+              <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />
+        <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />
 
-      <section className="panel map-page-panel" style={{ marginTop: 18 }}>
-        <div className="map-page-shell">
-          <RiskMapShell districts={districts} fires={fires} messages={messages.map} locale={locale} missionState={missionState} />
-        </div>
-      </section>
+        <section className="panel map-page-panel" style={{ marginTop: 18 }}>
+          <div className="map-page-shell">
+            <RiskMapShell districts={districts} fires={fires} messages={messages.map} locale={locale} missionState={missionState} />
+          </div>
+        </section>
 
-      <section className="panel map-page-stats" style={{ marginTop: 18 }}>
-        <div className="map-page-stat-grid">
-          {stats.map((entry) => (
-            <article className="map-page-stat-card" key={entry.label}>
-              <span>{entry.label}</span>
-              <strong>{entry.value}</strong>
-            </article>
-          ))}
-        </div>
-      </section>
+        <section className="panel map-page-stats" style={{ marginTop: 18 }}>
+          <div className="map-page-stat-grid">
+            {stats.map((entry) => (
+              <article className="map-page-stat-card" key={entry.label}>
+                <span>{entry.label}</span>
+                <strong>{entry.value}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

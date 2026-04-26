@@ -10,6 +10,7 @@ import LastUpdatedBadge from "../../components/LastUpdatedBadge";
 import PushSubscribeButton from "../../components/PushSubscribeButton";
 import WeatherStrip from "../../components/WeatherStrip";
 import MobileHeroCard from "../../components/MobileHeroCard";
+import MobileMapConsole from "../../components/MobileMapConsole";
 import PublicTopNav from "../../components/PublicTopNav";
 import DesktopHeroV2 from "../../components/DesktopHeroV2";
 import {
@@ -82,6 +83,21 @@ export default async function DashboardPage({ params }) {
 
   return (
     <div className={shellClass} dir={messages.dir}>
+      <div className="m-route-mobile-only">
+        <MobileMapConsole
+          districts={districts}
+          fires={fires}
+          messages={messages}
+          locale={locale}
+          missionState={missionState}
+          criticalDistricts={criticalDistricts}
+          activeFireDistricts={activeFireDistricts}
+          peakProbability={peakProbability}
+          runDate={runDate}
+        />
+      </div>
+
+      <div className="m-route-desktop-only">
       <header className="masthead mission-header">
         <PublicTopNav locale={locale} messages={messages} currentPath="/" />
 
@@ -320,6 +336,7 @@ export default async function DashboardPage({ params }) {
         <p className="muted">{messages.alerts.noteBody}</p>
         <p className="footnote">{messages.common.decisionSupport}</p>
       </section>
+      </div>
     </div>
   );
 }

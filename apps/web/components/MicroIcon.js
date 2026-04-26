@@ -45,6 +45,27 @@ export default function MicroIcon({ name = "dot", className = "", title = "" }) 
     case "share":
       shape = <><path d="M12 15.5v-9" /><path d="m8.5 9.5 3.5-3.5 3.5 3.5" /><path d="M6 14.5v3a1.5 1.5 0 0 0 1.5 1.5h9a1.5 1.5 0 0 0 1.5-1.5v-3" /></>;
       break;
+    case "radar":
+      shape = <><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1.6" fill="currentColor" /><path d="M12 12 18 6" /></>;
+      break;
+    case "info":
+      shape = <><circle cx="12" cy="12" r="8.5" /><path d="M12 11v5.5M12 7.5h.01" /></>;
+      break;
+    case "menu":
+      shape = <><circle cx="6" cy="12" r="1.4" fill="currentColor" /><circle cx="12" cy="12" r="1.4" fill="currentColor" /><circle cx="18" cy="12" r="1.4" fill="currentColor" /></>;
+      break;
+    case "clock":
+      shape = <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>;
+      break;
+    case "filter":
+      shape = <><path d="M4.5 6h15M7 12h10M10 18h4" /></>;
+      break;
+    case "globe":
+      shape = <><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.5 3 2.5 14 0 17M12 3.5c-2.5 3-2.5 14 0 17" /></>;
+      break;
+    case "external":
+      shape = <><path d="M14 4.5h5.5V10" /><path d="M19.5 4.5 11 13" /><path d="M19.5 14v3a2.5 2.5 0 0 1-2.5 2.5H7A2.5 2.5 0 0 1 4.5 17V7A2.5 2.5 0 0 1 7 4.5h3" /></>;
+      break;
     default:
       break;
   }

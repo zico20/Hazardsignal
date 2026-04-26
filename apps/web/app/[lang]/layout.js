@@ -1,6 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 import InstallAppHint from "../../components/InstallAppHint";
-import MobileBottomNav from "../../components/MobileBottomNav";
+import MobileBottomNavV2 from "../../components/MobileBottomNavV2";
 import ParticleCanvas from "../../components/ParticleCanvas";
 import SoftRevealController from "../../components/SoftRevealController";
 import SplashScreen from "../../components/SplashScreen";
@@ -22,7 +22,7 @@ export default async function LocaleLayout({ children, params }) {
       <SoftRevealController />
       {children}
       <InstallAppHint messages={messages} />
-      <MobileBottomNav locale={safeLocale} messages={messages} locales={messages.locales} />
+      <MobileBottomNavV2 locale={safeLocale} />
     </div>
   );
 }
