@@ -9,7 +9,6 @@ import InsightCarousel from "../../components/InsightCarousel";
 import LastUpdatedBadge from "../../components/LastUpdatedBadge";
 import PushSubscribeButton from "../../components/PushSubscribeButton";
 import WeatherStrip from "../../components/WeatherStrip";
-import MobileHeroCard from "../../components/MobileHeroCard";
 import MobileMapConsole from "../../components/MobileMapConsole";
 import PublicTopNav from "../../components/PublicTopNav";
 import DesktopHeroV2 from "../../components/DesktopHeroV2";
@@ -100,24 +99,6 @@ export default async function DashboardPage({ params }) {
       <div className="m-route-desktop-only">
       <header className="masthead mission-header">
         <PublicTopNav locale={locale} messages={messages} currentPath="/" />
-
-        <div className="home-hero-mobile-only">
-          <span className="eyebrow hero-eyebrow">{messages.home.eyebrow}</span>
-          <h1>{messages.appName}</h1>
-          <MobileHeroCard
-            missionState={missionState}
-            missionTitle={missionTitle}
-            focusLabel={focusLabel}
-            criticalCount={criticalDistricts}
-            hotspotCount={activeFireDistricts}
-            peakProbability={peakProbability}
-            highRiskArea={highestArea}
-            runDate={runDate}
-            districts={districts}
-            updatedAt={latestRun?.finished_at || latestRun?.started_at}
-            weather={weather}
-          />
-        </div>
 
         <DesktopHeroV2
           missionState={missionState}

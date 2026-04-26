@@ -3,7 +3,6 @@ import StickyMissionStrip from "../../../components/StickyMissionStrip";
 import MissionStatus from "../../../components/MissionStatus";
 import TelegramSubscribePanel from "../../../components/TelegramSubscribePanel";
 import PublicTopNav from "../../../components/PublicTopNav";
-import MobileHistoryList from "../../../components/MobileHistoryList";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
 import { formatPercent, formatProb, riskBadgeTone } from "../../../lib/format";
 import { getMessages, localizeSeverity, normalizeLocale } from "../../../lib/i18n";
@@ -46,10 +45,6 @@ export default async function AlertsPage({ params }) {
 
   return (
     <div className={shellClass} dir={messages.dir}>
-      <div className="m-route-mobile-only">
-        <MobileHistoryList alerts={rows} locale={locale} runDate={latestRun?.run_date || "-"} />
-      </div>
-
       <div className="m-route-desktop-only">
       <header className="masthead mission-header">
         <PublicTopNav locale={locale} messages={messages} currentPath="/alerts" />
