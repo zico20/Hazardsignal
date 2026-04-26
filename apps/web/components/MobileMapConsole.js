@@ -33,7 +33,7 @@ function colorFromClass(key) {
   }
 }
 
-const SNAP_POINTS = ["140px", 0.7];
+const SNAP_POINTS = [0.18, 0.7];
 
 export default function MobileMapConsole({
   districts = [],
@@ -45,6 +45,7 @@ export default function MobileMapConsole({
 }) {
   const [layers, setLayers] = useState({ districts: true, fires: true });
   const [snap, setSnap] = useState(SNAP_POINTS[0]);
+  const [open, setOpen] = useState(true);
 
   const top3 = districts.slice(0, 3);
   const lead = top3[0] || null;
@@ -78,17 +79,24 @@ export default function MobileMapConsole({
       </div>
 
       <Drawer.Root
-        open
+        open={open}
+        onOpenChange={setOpen}
         modal={false}
         dismissible={false}
         snapPoints={SNAP_POINTS}
         activeSnapPoint={snap}
         setActiveSnapPoint={setSnap}
+        direction="bottom"
+        repositionInputs={false}
       >
         <Drawer.Portal>
+          <Drawer.Overlay className="m-sheet-overlay" />
           <Drawer.Content className="m-sheet-content">
             <Drawer.Title className="m-sheet-sr-only">Top districts</Drawer.Title>
-            <div className="m-sheet-handle" aria-hidden="true" />
+            <Drawer.Description className="m-sheet-sr-only">Drag up to see top districts</Drawer.Description>
+            <div className="m-sheet-handle-area">
+              <div className="m-sheet-handle" aria-hidden="true" />
+            </div>
 
             <div className="m-sheet">
               <div className="m-sheet-peek">
