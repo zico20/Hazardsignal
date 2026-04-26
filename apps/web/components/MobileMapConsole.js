@@ -13,14 +13,6 @@ const SEVERITY_PILL = {
   monitoring: { label: "MONITORING", icon: "✅" }
 };
 
-function classFromProb(prob) {
-  if (prob >= 0.8) return "very-high";
-  if (prob >= 0.6) return "high";
-  if (prob >= 0.4) return "medium";
-  if (prob >= 0.2) return "low";
-  return "very-low";
-}
-
 function colorFromClass(key) {
   switch (key) {
     case "very-low": return "#4575b4";
@@ -36,6 +28,17 @@ function colorFromClass(key) {
 // Rank tile colors: 1st = red, 2nd = orange, 3rd = yellow
 const RANK_COLORS = ["#ef4444", "#ff8a3d", "#fbbf24"];
 
+// Map a textual risk class ("Very High") to our color key ("very-high")
+function classKey(districtClass) {
+  if (!districtClass) return "very-low";
+  return String(districtClass).toLowerCase().replace(/\s+/g, "-");
+}
+
+function fmtPct(value) {
+  const v = Number(value || 0);
+  return Math.round(v) + "%";
+}
+
 export default function MobileMapConsole({
   districts = [],
   fires = [],
@@ -48,11 +51,11 @@ export default function MobileMapConsole({
 
   const top3 = districts.slice(0, 3);
   const lead = top3[0] || null;
-  const leadProbClass = lead ? classFromProb(Number(lead.max_fire_prob || 0)) : "very-low";
-  const leadColor = colorFromClass(leadProbClass);
+  const leadClassKey = classKey(lead?.dominant_risk_class);
+  const leadColor = colorFromClass(leadClassKey);
   const severityKey = (lead?.operational_severity || missionState || "monitoring").toLowerCase();
   const pill = SEVERITY_PILL[severityKey] || SEVERITY_PILL.monitoring;
-  const probDisplay = Number(lead?.max_fire_prob || 0).toFixed(2);
+  const highRiskDisplay = fmtPct(lead?.high_or_very_high_area_pct);
 
   const visibleDistricts = layers.districts ? districts : [];
   const visibleFires = layers.fires ? fires : [];
@@ -72,9 +75,9 @@ export default function MobileMapConsole({
             {lead?.hotspot_count_24h > 0 ? ` · ${lead.hotspot_count_24h} hotspot${lead.hotspot_count_24h === 1 ? "" : "s"}` : ""}
           </span>
         </div>
-        <div className="m-live-badge" style={{ backgroundColor: leadColor }} data-class={leadProbClass}>
-          <span className="m-live-badge-num">{probDisplay}</span>
-          <span className="m-live-badge-label">prob</span>
+        <div className="m-live-badge" style={{ backgroundColor: leadColor }} data-class={leadClassKey}>
+          <span className="m-live-badge-num">{highRiskDisplay}</span>
+          <span className="m-live-badge-label">high-risk</span>
         </div>
       </div>
     </>
@@ -115,8 +118,8 @@ export default function MobileMapConsole({
                   <span className="m-sheet-item-class">{d.dominant_risk_class || "—"}</span>
                 </div>
                 <div className="m-sheet-item-prob">
-                  <span className="m-sheet-item-prob-num">{Number(d.max_fire_prob || 0).toFixed(2)}</span>
-                  <span className="m-sheet-item-prob-label">prob</span>
+                  <span className="m-sheet-item-prob-num">{fmtPct(d.high_or_very_high_area_pct)}</span>
+                  <span className="m-sheet-item-prob-label">high-risk</span>
                 </div>
               </div>
             );
