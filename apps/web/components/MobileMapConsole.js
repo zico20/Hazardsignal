@@ -33,6 +33,9 @@ function colorFromClass(key) {
   }
 }
 
+// Rank tile colors: 1st = red, 2nd = orange, 3rd = yellow
+const RANK_COLORS = ["#ef4444", "#ff8a3d", "#fbbf24"];
+
 export default function MobileMapConsole({
   districts = [],
   fires = [],
@@ -101,11 +104,10 @@ export default function MobileMapConsole({
         <div className="m-sheet-list">
           <h3 className="m-sheet-list-title">Top 3 districts</h3>
           {top3.map((d, i) => {
-            const cls = classFromProb(Number(d.max_fire_prob || 0));
-            const color = colorFromClass(cls);
+            const rankColor = RANK_COLORS[i] || RANK_COLORS[2];
             return (
               <div className="m-sheet-item" key={d.district_id || i} data-rank={i + 1}>
-                <div className="m-sheet-item-rank" style={{ backgroundColor: color }}>
+                <div className="m-sheet-item-rank" style={{ backgroundColor: rankColor, color: i === 2 ? "#0a0509" : "#fff" }}>
                   {i + 1}
                 </div>
                 <div className="m-sheet-item-body">
