@@ -6171,5 +6171,6 @@ form,
      Suppress any leftover legacy mobile UI
      ────────────────────────────────────────────────────────────────── */
   .mobile-bottom-nav-wrap,
-  .install-app-hint { display: none !important; }
+  .install-app-hint,
+  .install-hint { display: none !important; }
 }

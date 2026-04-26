@@ -19,8 +19,6 @@ const COPY = {
     references: "References",
     methodology: "Methodology",
     methodologyBody: "How we score risk and trigger alerts.",
-    repo: "Source code",
-    repoBody: "MIT-licensed components & methodology.",
     legal: "Legal",
     attribution: "Attributions",
     attributionBody: "OpenStreetMap, NASA FIRMS, Google Earth Engine."
@@ -36,8 +34,6 @@ const COPY = {
     references: "مراجع",
     methodology: "المنهجية",
     methodologyBody: "كيف نحسب الخطر ونطلق التنبيهات.",
-    repo: "الكود المصدري",
-    repoBody: "مكوّنات ومنهجية بترخيص MIT.",
     legal: "قانوني",
     attribution: "المصادر",
     attributionBody: "OpenStreetMap, NASA FIRMS, Google Earth Engine."
@@ -53,8 +49,6 @@ const COPY = {
     references: "Kaynaklar",
     methodology: "Metodoloji",
     methodologyBody: "Riski nasıl ölçüyoruz.",
-    repo: "Kaynak kod",
-    repoBody: "MIT lisanslı.",
     legal: "Yasal",
     attribution: "Atıflar",
     attributionBody: "OpenStreetMap, NASA FIRMS, Google Earth Engine."
@@ -138,19 +132,6 @@ export default function MobileMoreContent({
               <span>{c.methodologyBody}</span>
             </div>
           </Link>
-
-          <a className="m-more-row" href="https://github.com/zico20/OPT" target="_blank" rel="noreferrer">
-            <span className="m-more-row-icon" data-tone="docs">
-              <MicroIcon name="external" />
-            </span>
-            <div className="m-more-row-body">
-              <strong>{c.repo}</strong>
-              <span>{c.repoBody}</span>
-            </div>
-            <span className="m-more-row-action">
-              <MicroIcon name="external" />
-            </span>
-          </a>
         </section>
 
         <section className="m-more-section">
