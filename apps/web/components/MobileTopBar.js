@@ -8,9 +8,9 @@ const SCALE_CELLS = [
 ];
 
 const TITLES = {
-  en: { live: "Live", history: "History", about: "About", more: "Settings" },
-  ar: { live: "مباشر", history: "السجل", about: "حول", more: "الإعدادات" },
-  tr: { live: "Canlı", history: "Geçmiş", about: "Hakkında", more: "Ayarlar" }
+  en: { live: "Live", about: "About", more: "Settings" },
+  ar: { live: "مباشر", about: "حول", more: "الإعدادات" },
+  tr: { live: "Canlı", about: "Hakkında", more: "Ayarlar" }
 };
 
 export default function MobileTopBar({

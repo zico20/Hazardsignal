@@ -5545,7 +5545,7 @@ form,
   .m-bnav-inner {
     pointer-events: auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     align-items: stretch;
     gap: 4px;
     background: rgba(20, 18, 24, 0.9);
