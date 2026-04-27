@@ -5197,7 +5197,10 @@ form,
 
   /* App-like shell: dark background, no padding on the page wrapper */
   body, .locale-root { background: #07060a; }
-  .shell { background: #07060a !important; padding: 0 !important; max-width: none !important; min-height: 100vh; }
+  /* Padding-bottom keeps legacy mobile pages (methodology, districts) from
+     hiding their last paragraph behind the fixed bottom nav. v2 routes
+     (Live/About/More) use position: fixed and ignore parent padding. */
+  .shell { background: #07060a !important; padding: 0 0 calc(96px + env(safe-area-inset-bottom)) !important; max-width: none !important; min-height: 100vh; }
 
   /* Kill the route-loader's huge min-height so it doesn't block visibility */
   .m-route-mobile-only .route-loader { min-height: 200px !important; }
