@@ -27,6 +27,9 @@ export default function MicroIcon({ name = "dot", className = "", title = "" }) 
     case "bell":
       shape = <><path d="M7.5 17.5h9" /><path d="M9 17.5a3 3 0 0 0 6 0" /><path d="M17.5 17.5V11a5.5 5.5 0 1 0-11 0v6.5l-1.4 1.3h13.8l-1.4-1.3Z" /></>;
       break;
+    case "bell-off":
+      shape = <><path d="M7.5 17.5h9" /><path d="M9 17.5a3 3 0 0 0 6 0" /><path d="M17.5 17.5V11a5.5 5.5 0 0 0-9.6-2.6" /><path d="M6.5 11v6.5l-1.4 1.3h11" /><path d="M4.5 4.5l15 15" /></>;
+      break;
     case "book":
       shape = <><path d="M5 5.5a2 2 0 0 1 2-2h11v16H7a2 2 0 0 0-2 2v-16Z" /><path d="M7 3.5v18" /></>;
       break;

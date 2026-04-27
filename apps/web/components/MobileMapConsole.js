@@ -63,7 +63,7 @@ export default function MobileMapConsole({
       </div>
       <div className="m-live-badge" style={{ backgroundColor: leadColor }} data-class={leadClassKey}>
         <span className="m-live-badge-num">{highRiskDisplay}</span>
-        <span className="m-live-badge-label">high-risk</span>
+        <span className="m-live-badge-label">Risk %</span>
       </div>
     </div>
   );
@@ -104,7 +104,7 @@ export default function MobileMapConsole({
                 </div>
                 <div className="m-sheet-item-prob">
                   <span className="m-sheet-item-prob-num">{fmtPct(d.high_or_very_high_area_pct)}</span>
-                  <span className="m-sheet-item-prob-label">high-risk</span>
+                  <span className="m-sheet-item-prob-label">Risk %</span>
                 </div>
               </div>
             );

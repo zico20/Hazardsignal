@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import MicroIcon from "./MicroIcon";
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -83,16 +84,20 @@ export default function PushSubscribeButton() {
 
   if (state === "unsupported" || !vapidKey) return null;
 
+  const isOn = state === "subscribed";
   return (
     <button
-      className={["push-subscribe-btn", state === "subscribed" ? "push-active" : ""].filter(Boolean).join(" ")}
-      onClick={state === "subscribed" ? unsubscribe : subscribe}
+      type="button"
+      className={["push-subscribe-btn", isOn ? "push-active" : ""].filter(Boolean).join(" ")}
+      onClick={isOn ? unsubscribe : subscribe}
       disabled={state === "loading"}
-      title={state === "subscribed" ? "Disable push alerts" : "Enable push alerts"}
+      title={isOn ? "Disable push alerts" : "Enable push alerts"}
     >
-      <span className="push-icon">{state === "subscribed" ? "🔔" : "🔕"}</span>
+      <span className="push-icon">
+        <MicroIcon name={isOn ? "bell" : "bell-off"} />
+      </span>
       <span className="push-label">
-        {state === "subscribed" ? "Alerts On" : state === "loading" ? "..." : "Alerts"}
+        {isOn ? "Alerts On" : state === "loading" ? "..." : "Alerts"}
       </span>
     </button>
   );
