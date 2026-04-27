@@ -11,8 +11,10 @@ export default function MobileBottomSheet({ peek, children }) {
   const [expanded, setExpanded] = useState(false);
   const [dragDy, setDragDy] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const shellRef = useRef(null);
   const startY = useRef(0);
   const startExpanded = useRef(false);
+  const draggingRef = useRef(false);
 
   useEffect(() => {
     function update() {
@@ -23,6 +25,57 @@ export default function MobileBottomSheet({ peek, children }) {
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // Attach native touch listeners with passive: false so we can preventDefault
+  // and block the browser's pull-to-refresh / page scroll during drag.
+  useEffect(() => {
+    const node = shellRef.current;
+    if (!node) return undefined;
+
+    function handleStart(e) {
+      const t = e.touches[0];
+      if (!t) return;
+      startY.current = t.clientY;
+      startExpanded.current = expanded;
+      draggingRef.current = true;
+      setDragging(true);
+      setDragDy(0);
+    }
+
+    function handleMove(e) {
+      if (!draggingRef.current) return;
+      const t = e.touches[0];
+      if (!t) return;
+      const dy = t.clientY - startY.current;
+      setDragDy(dy);
+      e.preventDefault();
+    }
+
+    function handleEnd() {
+      if (!draggingRef.current) return;
+      draggingRef.current = false;
+      setDragging(false);
+      setDragDy((currentDy) => {
+        if (startExpanded.current) {
+          if (currentDy > SNAP_THRESHOLD) setExpanded(false);
+        } else {
+          if (currentDy < -SNAP_THRESHOLD) setExpanded(true);
+        }
+        return 0;
+      });
+    }
+
+    node.addEventListener("touchstart", handleStart, { passive: true });
+    node.addEventListener("touchmove", handleMove, { passive: false });
+    node.addEventListener("touchend", handleEnd, { passive: true });
+    node.addEventListener("touchcancel", handleEnd, { passive: true });
+    return () => {
+      node.removeEventListener("touchstart", handleStart);
+      node.removeEventListener("touchmove", handleMove);
+      node.removeEventListener("touchend", handleEnd);
+      node.removeEventListener("touchcancel", handleEnd);
+    };
+  }, [expanded]);
+
   const expandedHeight = Math.round(vh * EXPANDED_RATIO);
   const baseHeight = expanded ? expandedHeight : PEEK_HEIGHT;
 
@@ -32,42 +85,13 @@ export default function MobileBottomSheet({ peek, children }) {
   if (height < PEEK_HEIGHT) height = PEEK_HEIGHT;
   if (height > expandedHeight) height = expandedHeight;
 
-  function onTouchStart(e) {
-    startY.current = e.touches[0].clientY;
-    startExpanded.current = expanded;
-    setDragging(true);
-    setDragDy(0);
-  }
-
-  function onTouchMove(e) {
-    const dy = e.touches[0].clientY - startY.current;
-    setDragDy(dy);
-    e.preventDefault?.();
-  }
-
-  function onTouchEnd() {
-    const dy = dragDy;
-    if (startExpanded.current) {
-      // started expanded; if dragged down past threshold -> collapse
-      if (dy > SNAP_THRESHOLD) setExpanded(false);
-    } else {
-      // started peek; if dragged up past threshold -> expand
-      if (dy < -SNAP_THRESHOLD) setExpanded(true);
-    }
-    setDragging(false);
-    setDragDy(0);
-  }
-
   return (
     <div
+      ref={shellRef}
       className={["m-sheet-shell", expanded ? "expanded" : "peek", dragging ? "dragging" : ""].filter(Boolean).join(" ")}
       style={{ height: height + "px" }}
       role="dialog"
       aria-label="Top districts"
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      onTouchCancel={onTouchEnd}
     >
       <div className="m-sheet-handle-area">
         <div className="m-sheet-handle" aria-hidden="true" />

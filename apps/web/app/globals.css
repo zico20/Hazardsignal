@@ -5197,6 +5197,10 @@ form,
 
   /* App-like shell: dark background, no padding on the page wrapper */
   body, .locale-root { background: #07060a; }
+  /* Disable pull-to-refresh and elastic bounce so a downward drag inside
+     the bottom sheet doesn't trigger the browser's refresh gesture. */
+  html, body { overscroll-behavior-y: none; }
+
   /* Padding-bottom keeps legacy mobile pages (methodology, districts) from
      hiding their last paragraph behind the fixed bottom nav. v2 routes
      (Live/About/More) use position: fixed and ignore parent padding. */
