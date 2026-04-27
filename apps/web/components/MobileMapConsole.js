@@ -6,13 +6,6 @@ import MobileTopBar from "./MobileTopBar";
 import MobileMapLayerToggles from "./MobileMapLayerToggles";
 import MobileBottomSheet from "./MobileBottomSheet";
 
-const SEVERITY_PILL = {
-  critical: { label: "CRITICAL", icon: "🔥" },
-  warning: { label: "WARNING", icon: "⚠️" },
-  watch: { label: "WATCH", icon: "👁" },
-  monitoring: { label: "MONITORING", icon: "✅" }
-};
-
 function colorFromClass(key) {
   switch (key) {
     case "very-low": return "#4575b4";
@@ -54,33 +47,25 @@ export default function MobileMapConsole({
   const leadClassKey = classKey(lead?.dominant_risk_class);
   const leadColor = colorFromClass(leadClassKey);
   const severityKey = (lead?.operational_severity || missionState || "monitoring").toLowerCase();
-  const pill = SEVERITY_PILL[severityKey] || SEVERITY_PILL.monitoring;
   const highRiskDisplay = fmtPct(lead?.high_or_very_high_area_pct);
 
   const visibleDistricts = layers.districts ? districts : [];
   const visibleFires = layers.fires ? fires : [];
 
   const peek = (
-    <>
-      <div className="m-live-pill" data-severity={severityKey}>
-        <span className="m-live-pill-icon" aria-hidden="true">{pill.icon}</span>
-        <span className="m-live-pill-text">{pill.label}</span>
+    <div className="m-live-headline">
+      <div className="m-live-district">
+        <strong className="m-live-name">{lead?.district_name || "—"}</strong>
+        <span className="m-live-sub">
+          {lead?.dominant_risk_class || "—"}
+          {lead?.hotspot_count_24h > 0 ? ` · ${lead.hotspot_count_24h} hotspot${lead.hotspot_count_24h === 1 ? "" : "s"}` : ""}
+        </span>
       </div>
-
-      <div className="m-live-headline">
-        <div className="m-live-district">
-          <strong className="m-live-name">{lead?.district_name || "—"}</strong>
-          <span className="m-live-sub">
-            {lead?.dominant_risk_class || "—"}
-            {lead?.hotspot_count_24h > 0 ? ` · ${lead.hotspot_count_24h} hotspot${lead.hotspot_count_24h === 1 ? "" : "s"}` : ""}
-          </span>
-        </div>
-        <div className="m-live-badge" style={{ backgroundColor: leadColor }} data-class={leadClassKey}>
-          <span className="m-live-badge-num">{highRiskDisplay}</span>
-          <span className="m-live-badge-label">high-risk</span>
-        </div>
+      <div className="m-live-badge" style={{ backgroundColor: leadColor }} data-class={leadClassKey}>
+        <span className="m-live-badge-num">{highRiskDisplay}</span>
+        <span className="m-live-badge-label">high-risk</span>
       </div>
-    </>
+    </div>
   );
 
   return (
