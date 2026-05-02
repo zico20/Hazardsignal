@@ -19,8 +19,13 @@ function colorFromClass(key) {
   }
 }
 
-// Rank tile colors: 1st = red, 2nd = orange, 3rd = yellow
-const RANK_COLORS = ["#ef4444", "#ff8a3d", "#fbbf24"];
+// Rank tile colors, descending intensity: red → orange → amber → light → slate
+const RANK_COLORS = ["#ef4444", "#ff8a3d", "#fbbf24", "#fde68a", "#94a3b8"];
+
+// Ranks with light tile backgrounds need dark text for contrast.
+function rankTextColor(index) {
+  return index === 2 || index === 3 ? "#0a0509" : "#fff";
+}
 
 // Map a textual risk class ("Very High") to our color key ("very-high")
 function classKey(districtClass) {
@@ -48,13 +53,13 @@ export default function MobileMapConsole({
 }) {
   const [layers, setLayers] = useState({ districts: true, fires: true });
 
-  // Mobile shows "Max %" as the headline metric, so order Top 3 by it directly
+  // Mobile shows "Max %" as the headline metric, so order Top N by it directly
   // (the desktop leaderboard keeps the operational-priority sort because it
   // has explicit columns for each metric).
-  const top3 = [...districts]
+  const topN = [...districts]
     .sort((a, b) => Number(b.max_fire_prob ?? 0) - Number(a.max_fire_prob ?? 0))
-    .slice(0, 3);
-  const lead = top3[0] || null;
+    .slice(0, 5);
+  const lead = topN[0] || null;
   const leadClassKey = classKey(lead?.dominant_risk_class);
   const leadColor = colorFromClass(leadClassKey);
   const severityKey = (lead?.operational_severity || missionState || "monitoring").toLowerCase();
@@ -101,12 +106,12 @@ export default function MobileMapConsole({
 
       <MobileBottomSheet peek={peek} above={<MobileWeatherFloats weather={weather} />}>
         <div className="m-sheet-list">
-          <h3 className="m-sheet-list-title">Top 3 districts</h3>
-          {top3.map((d, i) => {
-            const rankColor = RANK_COLORS[i] || RANK_COLORS[2];
+          <h3 className="m-sheet-list-title">Top 5 districts</h3>
+          {topN.map((d, i) => {
+            const rankColor = RANK_COLORS[i] || RANK_COLORS[RANK_COLORS.length - 1];
             return (
               <div className="m-sheet-item" key={d.district_id || i} data-rank={i + 1}>
-                <div className="m-sheet-item-rank" style={{ backgroundColor: rankColor, color: i === 2 ? "#0a0509" : "#fff" }}>
+                <div className="m-sheet-item-rank" style={{ backgroundColor: rankColor, color: rankTextColor(i) }}>
                   {i + 1}
                 </div>
                 <div className="m-sheet-item-body">
