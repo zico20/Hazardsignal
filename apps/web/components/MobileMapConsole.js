@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import RiskMapShell from "./RiskMapShell";
 import MobileTopBar from "./MobileTopBar";
-import MobileMapLayerToggles from "./MobileMapLayerToggles";
 import MobileBottomSheet from "./MobileBottomSheet";
 import MobileWeatherFloats from "./MobileWeatherFloats";
 import { classFromMaxProb } from "../lib/format";
@@ -52,8 +50,6 @@ export default function MobileMapConsole({
   runDate = "-",
   weather = null
 }) {
-  const [layers, setLayers] = useState({ districts: true, fires: true });
-
   // Mobile shows "Max %" as the headline metric, so order Top N by it directly
   // (the desktop leaderboard keeps the operational-priority sort because it
   // has explicit columns for each metric).
@@ -66,9 +62,6 @@ export default function MobileMapConsole({
   const leadColor = colorFromClass(leadClassKey);
   const severityKey = (lead?.operational_severity || missionState || "monitoring").toLowerCase();
   const peakDisplay = fmtMaxProb(lead?.max_fire_prob);
-
-  const visibleDistricts = layers.districts ? districts : [];
-  const visibleFires = layers.fires ? fires : [];
 
   const peek = (
     <div className="m-live-headline">
@@ -93,13 +86,12 @@ export default function MobileMapConsole({
         locale={locale}
         runDate={runDate}
         showScale={true}
-        rightSlot={<MobileMapLayerToggles onToggle={setLayers} />}
       />
 
       <div className="m-live-map">
         <RiskMapShell
-          districts={visibleDistricts}
-          fires={visibleFires}
+          districts={districts}
+          fires={fires}
           messages={messages?.map || messages}
           locale={locale}
           missionState={missionState}
