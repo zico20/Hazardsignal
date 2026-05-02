@@ -28,7 +28,7 @@ const DEFAULTS = {
   eeAssetNamePrefix: process.env.EE_ASSET_NAME_PREFIX || "antalya_fire_risk",
   eeClassifierAssetId: process.env.EE_CLASSIFIER_ASSET_ID || "",
   eeClassifierFallbackAssetId: process.env.EE_CLASSIFIER_FALLBACK_ASSET_ID || "",
-  eeClassifierOutputMode: process.env.EE_CLASSIFIER_OUTPUT_MODE || "CLASSIFICATION",
+  eeClassifierOutputMode: process.env.EE_CLASSIFIER_OUTPUT_MODE || "PROBABILITY",
   eeRiskOutputStrategy: process.env.EE_RISK_OUTPUT_STRATEGY || "dynamic_training_only",
   eeAllowDynamicTrainingFallback: toBoolean(process.env.EE_ALLOW_DYNAMIC_TRAINING_FALLBACK, true),
   eeAllowHeuristicFallback: toBoolean(process.env.EE_ALLOW_HEURISTIC_FALLBACK, true),
