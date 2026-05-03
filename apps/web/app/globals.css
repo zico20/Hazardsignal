@@ -1287,6 +1287,35 @@ button.secondary:hover {
   background: #1a2332 !important;
 }
 
+/* ──────────────────────────────────────────────────────────────────
+   Radar pulse on Leaflet CircleMarkers — High / Very High districts.
+   The CircleMarker renders an <path> with a circular `d`; using
+   `transform-origin: center` together with `transform-box: fill-box`
+   anchors the scale on the marker's own center, so the pulse expands
+   from the dot rather than the SVG corner.
+   ────────────────────────────────────────────────────────────────── */
+.leaflet-pulse-ring {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: leaflet-radar-ping 2400ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  pointer-events: none;
+}
+.leaflet-pulse-ring-2 {
+  animation-delay: 1200ms;
+}
+@keyframes leaflet-radar-ping {
+  0%   { transform: scale(0.55); opacity: 0.7; }
+  70%  { opacity: 0.08; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-pulse-ring {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .ops-map-shell {
   position: relative;
 }

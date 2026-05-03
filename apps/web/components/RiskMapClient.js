@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { CircleMarker, MapContainer, Popup, TileLayer, WMSTileLayer, ZoomControl } from "react-leaflet";
 import { classFromMaxProb, formatPercent, formatProb, riskBadgeTone, severityColor } from "../lib/format";
 import { localizeRiskClass } from "../lib/i18n";
@@ -20,6 +20,14 @@ function riskColor(label) {
     default:
       return "#4575b4";
   }
+}
+
+// High-risk districts get a radar-pulse halo. Very High pings faster and
+// runs a second offset ring so it reads as the most urgent on the map.
+function pulseProfile(peakClass) {
+  if (peakClass === "Very High") return { rings: 2, color: "#ff5454" };
+  if (peakClass === "High")      return { rings: 1, color: "#ff8a3d" };
+  return null;
 }
 
 function t(messages, key, fallback) {
@@ -57,9 +65,29 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
         )}
         {districts.map((district) => {
           const peakClass = classFromMaxProb(district.max_fire_prob);
+          const baseRadius = 9 + Math.round(Number(district.max_fire_prob) * 10);
+          const pulse = pulseProfile(peakClass);
           return (
+          <Fragment key={district.district_id}>
+            {/* Radar pulse halos for High / Very High districts. Render
+                BEFORE the main marker so the rings sit underneath. */}
+            {pulse && Array.from({ length: pulse.rings }).map((_, idx) => (
+              <CircleMarker
+                key={`pulse-${idx}`}
+                center={[district.lat, district.lon]}
+                radius={baseRadius}
+                pathOptions={{
+                  color: pulse.color,
+                  fillColor: pulse.color,
+                  fillOpacity: 0,
+                  weight: 2,
+                  opacity: 0.7,
+                  className: `leaflet-pulse-ring${idx === 1 ? " leaflet-pulse-ring-2" : ""}`,
+                  interactive: false
+                }}
+              />
+            ))}
           <CircleMarker
-            key={district.district_id}
             center={[district.lat, district.lon]}
             pathOptions={{
               color: riskColor(peakClass),
@@ -68,7 +96,7 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
               weight: 2,
               opacity: 0.92
             }}
-            radius={9 + Math.round(Number(district.max_fire_prob) * 10)}
+            radius={baseRadius}
           >
             <Popup className="ops-popup" closeButton={false}>
               <div className="map-popup">
@@ -95,6 +123,7 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
               </div>
             </Popup>
           </CircleMarker>
+          </Fragment>
           );
         })}
         {fires.map((fire) => (
