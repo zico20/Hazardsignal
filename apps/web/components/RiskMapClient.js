@@ -71,22 +71,38 @@ export default function RiskMapClient({ districts, fires, messages, locale = "en
           <Fragment key={district.district_id}>
             {/* Radar pulse halos for High / Very High districts. Render
                 BEFORE the main marker so the rings sit underneath. */}
-            {pulse && Array.from({ length: pulse.rings }).map((_, idx) => (
-              <CircleMarker
-                key={`pulse-${idx}`}
-                center={[district.lat, district.lon]}
-                radius={baseRadius}
-                pathOptions={{
-                  color: pulse.color,
-                  fillColor: pulse.color,
-                  fillOpacity: 0,
-                  weight: 2,
-                  opacity: 0.7,
-                  className: `leaflet-pulse-ring${idx === 1 ? " leaflet-pulse-ring-2" : ""}`,
-                  interactive: false
-                }}
-              />
-            ))}
+            {pulse && Array.from({ length: pulse.rings }).map((_, idx) => {
+              // react-leaflet 5 silently drops `className` and `interactive`
+              // from pathOptions, so we hook the layer's `add` event and
+              // mutate the underlying SVG <path> directly. Confirmed via
+              // DOM inspection: pathOptions.className doesn't reach the
+              // rendered element on its own.
+              const pulseClass = `leaflet-pulse-ring${idx === 1 ? " leaflet-pulse-ring-2" : ""}`;
+              return (
+                <CircleMarker
+                  key={`pulse-${idx}`}
+                  center={[district.lat, district.lon]}
+                  radius={baseRadius}
+                  pathOptions={{
+                    color: pulse.color,
+                    fillColor: pulse.color,
+                    fillOpacity: 0,
+                    weight: 2,
+                    opacity: 0.7
+                  }}
+                  eventHandlers={{
+                    add: (e) => {
+                      const path = e.target?._path;
+                      if (!path) return;
+                      // Replace classes wholesale so we drop the default
+                      // `leaflet-interactive` Leaflet adds to every Path.
+                      path.setAttribute("class", pulseClass);
+                      path.style.pointerEvents = "none";
+                    }
+                  }}
+                />
+              );
+            })}
           <CircleMarker
             center={[district.lat, district.lon]}
             pathOptions={{
