@@ -9,7 +9,6 @@ const SCALE_CELLS = [
 
 const TITLES = {
   en: { live: "Live", about: "About", more: "Settings", methodology: "Methodology" },
-  ar: { live: "مباشر", about: "حول", more: "الإعدادات", methodology: "المنهجية" },
   tr: { live: "Canlı", about: "Hakkında", more: "Ayarlar", methodology: "Metodoloji" }
 };
 

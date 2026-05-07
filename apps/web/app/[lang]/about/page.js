@@ -1,6 +1,6 @@
 import Link from "next/link";
 import MobileAboutContent from "../../../components/MobileAboutContent";
-import PublicTopNav from "../../../components/PublicTopNav";
+import DesktopShellV3 from "../../../components/DesktopShellV3";
 import { getLatestRun, getDistrictRiskDaily, getAlertEvents } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
 
@@ -23,25 +23,35 @@ export default async function AboutPage({ params }) {
     runDate: latestRun?.run_date || "-"
   };
 
-  const shellClass = ["shell", messages.dir === "rtl" ? "rtl" : ""].filter(Boolean).join(" ");
-
   return (
-    <div className={shellClass} dir={messages.dir}>
+    <div className="shell">
       <div className="m-route-mobile-only">
         <MobileAboutContent locale={locale} runDate={latestRun?.run_date || "-"} stats={stats} />
       </div>
 
       <div className="m-route-desktop-only">
-        <header className="masthead">
-          <PublicTopNav locale={locale} messages={messages} currentPath="/about" />
-        </header>
-        <section className="panel" style={{ marginTop: 18 }}>
-          <h1>About HazardSignal</h1>
-          <p>HazardSignal is an operational platform delivering daily wildfire-risk signals for the Antalya region.</p>
-          <p>
-            <Link className="button secondary" href={"/" + locale + "/methodology"}>Read the methodology →</Link>
-          </p>
-        </section>
+        <DesktopShellV3
+          locale={locale}
+          messages={messages}
+          currentPath="/about"
+          pageTitle="About HazardSignal"
+          pageSub={`${stats.districts} districts · ${stats.alerts30d} alerts in 30d`}
+          runDate={stats.runDate}
+          modelName={latestRun?.selected_model || "RandomForest"}
+          criticalAlertCount={alerts.filter((a) => a.severity === "Critical").length}
+        >
+          <div className="dv3-page-pad" style={{ maxWidth: 720, margin: "0 auto" }}>
+            <h1 className="dv3-method-h1">About HazardSignal</h1>
+            <p className="dv3-method-lede">
+              HazardSignal is an operational platform delivering daily wildfire-risk signals for the Antalya region.
+            </p>
+            <p>
+              <Link className="dv3-btn-secondary" href={"/" + locale + "/methodology"}>
+                Read the methodology →
+              </Link>
+            </p>
+          </div>
+        </DesktopShellV3>
       </div>
     </div>
   );

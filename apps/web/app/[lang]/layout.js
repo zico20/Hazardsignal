@@ -21,7 +21,7 @@ export default async function LocaleLayout({ children, params }) {
   }
 
   return (
-    <div className="locale-root" lang={safeLocale} dir={messages.dir} data-locale={safeLocale}>
+    <div className="locale-root" lang={safeLocale} data-locale={safeLocale}>
       <SplashScreen />
       <ParticleCanvas />
       <SoftRevealController />

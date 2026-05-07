@@ -91,7 +91,7 @@ export default function AdminDashboard({ initialRules, initialSubscribers, label
   }
 
   return (
-    <div className={`admin-grid ${locale === "ar" ? "rtl" : ""}`}>
+    <div className="admin-grid">
       <section className="panel admin-panel admin-panel-dark">
         <span className="eyebrow">{labels.signalTest || "Signal Test"}</span>
         <h2>{label(labels, "sendTestTitle")}</h2>

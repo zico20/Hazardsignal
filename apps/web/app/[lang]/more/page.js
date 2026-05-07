@@ -12,10 +12,8 @@ export default async function MorePage({ params }) {
   const latestRun = await getLatestRun();
   const telegramUrl = getTelegramSubscribeUrl();
 
-  const shellClass = ["shell", messages.dir === "rtl" ? "rtl" : ""].filter(Boolean).join(" ");
-
   return (
-    <div className={shellClass} dir={messages.dir}>
+    <div className="shell">
       <div className="m-route-mobile-only">
         <MobileMoreContent
           locale={locale}

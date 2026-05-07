@@ -1,12 +1,7 @@
-﻿import Link from "next/link";
-import StickyMissionStrip from "../../../components/StickyMissionStrip";
-import MissionStatus from "../../../components/MissionStatus";
-import TelegramSubscribePanel from "../../../components/TelegramSubscribePanel";
-import PublicTopNav from "../../../components/PublicTopNav";
+import DesktopShellV3 from "../../../components/DesktopShellV3";
+import DesktopAlertsV3 from "../../../components/DesktopAlertsV3";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
-import { formatPercent, formatProb, riskBadgeTone } from "../../../lib/format";
-import { getMessages, localizeSeverity, normalizeLocale } from "../../../lib/i18n";
-import { deriveMissionState } from "../../../lib/mission";
+import { getMessages, normalizeLocale } from "../../../lib/i18n";
 
 export default async function AlertsPage({ params }) {
   const resolvedParams = await params;
@@ -20,117 +15,22 @@ export default async function AlertsPage({ params }) {
 
   const rows = alerts.slice(0, 40);
 
-  function shortDate(iso) {
-    if (!iso) return "-";
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return "-";
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const yy = String(d.getFullYear() % 100).padStart(2, "0");
-    return `${dd}-${mm}-${yy}`;
-  }
-
-  function peakTier(p) {
-    const v = Number(p ?? 0);
-    if (v >= 0.8) return "extreme";
-    if (v >= 0.6) return "very-high";
-    if (v >= 0.4) return "high";
-    if (v >= 0.2) return "moderate";
-    return "low";
-  }
-
-  const missionState = deriveMissionState({ latestRun, alerts: rows });
-  const focusLabel = rows[0]?.district_name || "";
-  const shellClass = ["shell", "mission-shell", "mission-" + missionState, messages.dir === "rtl" ? "rtl" : ""].filter(Boolean).join(" ");
-
   return (
-    <div className={shellClass} dir={messages.dir}>
+    <div className="shell">
       <div className="m-route-desktop-only">
-      <header className="masthead mission-header">
-        <PublicTopNav locale={locale} messages={messages} currentPath="/alerts" />
-
-        <div className="hero-grid hero-grid-compact">
-          <div className="hero-copy">
-            <span className="eyebrow">{messages.alerts.eyebrow}</span>
-            <h1>{messages.alerts.title}</h1>
-            <p>{messages.alerts.intro}</p>
-            <div className="alerts-telegram-slot">
-              <TelegramSubscribePanel
-                messages={messages}
-                title={messages.alerts.subscribeTitle || messages.home.subscriptionTitle}
-                body={messages.alerts.subscribeBody || messages.home.subscriptionBody}
-                compact
-                buttonOnly
-              />
-            </div>
-            <div className="alerts-mission-wrap">
-              <MissionStatus messages={messages} state={missionState} focusLabel={focusLabel} compact />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <StickyMissionStrip messages={messages} state={missionState} focusLabel={focusLabel} />
-
-      <section className="panel" style={{ marginTop: 18 }}>
-        <h2>{messages.alerts.feedTitle}: {latestRun?.run_date || "-"}</h2>
-        <div className="ops-table-wrap">
-          {rows.length === 0 ? (
-            <p className="muted">-</p>
-          ) : (
-            <table className="ops-table ops-table-alerts ops-mobile-feed">
-              <thead>
-                <tr>
-                  <th>{messages.alerts.status}</th>
-                  <th>{messages.home.district}</th>
-                  <th>{messages.common.note}</th>
-                  <th>{messages.alerts.maxProb}</th>
-                  <th>{messages.alerts.highArea}</th>
-                  <th>{messages.alerts.hotspots}</th>
-                  <th>{messages.alerts.sent}</th>
-                  <th>{messages.nav.dashboard}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((alert) => (
-                  <tr key={alert.alert_id} data-peak-tier={peakTier(alert.max_fire_prob)}>
-                    <td data-label={messages.alerts.status}>
-                      <div className={["badge", riskBadgeTone(alert.severity)].join(" ")}>
-                        {localizeSeverity(alert.severity, locale)}
-                      </div>
-                    </td>
-                    <td data-label={messages.home.district}>
-                      <div className="ops-row-title">{alert.district_name}</div>
-                      <div className="ops-row-sub">{alert.district_id}</div>
-                    </td>
-                    <td data-label={messages.common.note}>
-                      <div className="ops-row-sub ops-wrap">{alert.trigger_reason}</div>
-                    </td>
-                    <td className="ops-number" data-label={messages.alerts.maxProb}>{formatProb(alert.max_fire_prob, locale)}</td>
-                    <td className="ops-number" data-label={messages.alerts.highArea}>{formatPercent(alert.high_or_very_high_area_pct, locale)}</td>
-                    <td className="ops-number" data-label={messages.alerts.hotspots}>{alert.hotspot_count_24h}</td>
-                    <td data-label={messages.alerts.sent}>
-                      <span className="ops-timestamp">{shortDate(alert.sent_at)}</span>
-                    </td>
-                    <td data-label={messages.nav.dashboard}>
-                      <Link href={"/" + locale + "/districts/" + alert.district_id} className="ops-link-button">
-                        {messages.home.district}
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </section>
-
-      <section className="panel footnote-panel" style={{ marginTop: 18 }}>
-        <h3>{messages.common.note}</h3>
-        <p className="footnote">{messages.common.decisionSupport}</p>
-      </section>
+        <DesktopShellV3
+          locale={locale}
+          messages={messages}
+          currentPath="/alerts"
+          pageTitle={messages.alerts.title}
+          pageSub={messages.alerts.intro}
+          runDate={latestRun?.run_date || "-"}
+          modelName={latestRun?.selected_model || "RandomForest"}
+          criticalAlertCount={rows.filter((a) => a.severity === "Critical").length}
+        >
+          <DesktopAlertsV3 locale={locale} messages={messages} alerts={rows} />
+        </DesktopShellV3>
       </div>
     </div>
   );
 }
-

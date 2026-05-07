@@ -1,6 +1,6 @@
 function normalizeLocale(locale) {
   const safe = String(locale || "en").toLowerCase();
-  if (safe === "ar" || safe === "tr" || safe === "en") {
+  if (safe === "tr" || safe === "en") {
     return safe;
   }
   return "en";

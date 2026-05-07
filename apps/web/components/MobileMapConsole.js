@@ -13,13 +13,12 @@ import { localizeRiskClass } from "../lib/i18n";
 // other UI bits (header + metric label).
 const SHEET_STRINGS = {
   en: { topN: "Top 5 districts", maxLabel: "Max %", hotspot: (n) => `· ${n} hotspot${n === 1 ? "" : "s"}` },
-  ar: { topN: "أعلى 5 مناطق", maxLabel: "النسبة القصوى", hotspot: (n) => `· ${n} نقطة ساخنة` },
   tr: { topN: "İlk 5 ilçe", maxLabel: "Maks %", hotspot: (n) => `· ${n} sıcak nokta` }
 };
 
 function pickSheetStrings(locale) {
   const k = String(locale || "en").toLowerCase();
-  if (k === "ar" || k === "tr") return SHEET_STRINGS[k];
+  if (k === "tr") return SHEET_STRINGS.tr;
   return SHEET_STRINGS.en;
 }
 

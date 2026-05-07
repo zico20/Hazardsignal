@@ -4,25 +4,18 @@ export default function Loading() {
       <div className="route-loader-glow" aria-hidden="true" />
       <div className="route-loader-content">
         <div className="route-loader-mark" aria-hidden="true">
-          <svg viewBox="0 0 512 512" width="56" height="56">
-            <path
-              d="M150 220C150 140 210 100 256 100C302 100 362 140 362 220"
-              stroke="#FF5F1F"
-              strokeWidth="35"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <path
-              d="M190 270C190 230 225 210 256 210C287 210 322 230 322 270V310C322 350 287 380 256 380C225 380 190 350 190 310"
-              stroke="#FF5F1F"
-              strokeWidth="30"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <path
-              d="M256 270L280 320C280 320 256 345 256 345C256 345 232 320 232 320L256 270Z"
-              fill="#FF3131"
-            />
+          <svg viewBox="0 0 64 64" width="56" height="56">
+            <defs>
+              <linearGradient id="hs-arc-loader" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#ff5a1f" />
+                <stop offset="100%" stopColor="#ff8a3d" />
+              </linearGradient>
+            </defs>
+            <path d="M 8 42 A 24 24 0 0 1 56 42" fill="none" stroke="url(#hs-arc-loader)" strokeWidth="3.2" strokeLinecap="round" opacity="0.95" />
+            <path d="M 16 42 A 16 16 0 0 1 48 42" fill="none" stroke="url(#hs-arc-loader)" strokeWidth="3.2" strokeLinecap="round" opacity="0.6" />
+            <path d="M 23 42 A 9 9 0 0 1 41 42" fill="none" stroke="url(#hs-arc-loader)" strokeWidth="3.2" strokeLinecap="round" opacity="0.3" />
+            <circle cx="32" cy="42" r="3.4" fill="#ff8a3d" />
+            <circle cx="32" cy="42" r="1.6" fill="#ffffff" opacity="0.95" />
           </svg>
           <span className="route-loader-ring" />
         </div>

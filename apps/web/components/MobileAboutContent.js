@@ -19,23 +19,6 @@ const COPY = {
     creditsTitle: "Built by",
     creditsBody: "Independent research project. Open about how the model works."
   },
-  ar: {
-    eyebrow: "حول",
-    title: "HazardSignal",
-    tagline: "إشارات يومية لخطر الحرائق في إقليم أنطاليا.",
-    statsDistricts: "مناطق",
-    statsAlerts: "تنبيهات (30ي)",
-    statsLastRun: "آخر تشغيل",
-    mission: "المهمّة",
-    missionBody: "ندمج صور الأقمار، بيانات الطقس، وتعلّم الآلة لكشف خطر الحريق قبل اندلاعه. هدفنا: إيصال الإشارة للناس في الوقت المناسب.",
-    coverage: "التغطية",
-    coverageBody: "كل مناطق إقليم أنطاليا في تركيا. تحديث يومي وبيانات نقاط ساخنة لحظية.",
-    sources: "مصادر البيانات",
-    sourcesBody: "Sentinel-2، Landsat، FIRMS (VIIRS / MODIS)، بيانات طقس إقليمية.",
-    methodCta: "اقرأ المنهجية",
-    creditsTitle: "مَن وراء المشروع",
-    creditsBody: "مشروع بحثي مستقل. شفّاف حول كيفية عمل النموذج."
-  },
   tr: {
     eyebrow: "HAKKINDA",
     title: "HazardSignal",

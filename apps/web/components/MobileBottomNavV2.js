@@ -6,7 +6,6 @@ import MicroIcon from "./MicroIcon";
 
 const LABELS = {
   en: { live: "Live", about: "About", more: "More" },
-  ar: { live: "مباشر", about: "حول", more: "المزيد" },
   tr: { live: "Canlı", about: "Hakkında", more: "Daha" }
 };
 

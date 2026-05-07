@@ -27,24 +27,6 @@ const STRINGS = {
     httpError: "Sorry, the assistant ran into an error. Try again.",
     networkError: "Network error — could not reach the assistant. Check your connection."
   },
-  ar: {
-    intro: "اسألني أي شيء عن مخاطر الحرائق اليوم ..",
-    sub: "5 أسئلة في اليوم",
-    placeholder: "اسأل عن منطقة، حريق، أو الطقس…",
-    placeholderLimited: "تم بلوغ الحد اليومي",
-    placeholderSessionFull: "الجلسة ممتلئة — ابدأ من جديد",
-    sendAriaLabel: "إرسال",
-    closeAriaLabel: "إغلاق",
-    resetAriaLabel: "ابدأ من جديد",
-    openAriaLabel: "افتح Ask AI",
-    closeBtnAriaLabel: "أغلق Ask AI",
-    panelAriaLabel: "Ask AI عن مخاطر الحرائق في أنطاليا",
-    sessionFullNote: "الجلسة ممتلئة — اضغط ↻ للبدء من جديد.",
-    remaining: (n) => <>المتبقي اليوم: <strong>{n}</strong></>,
-    dailyLimitReached: "بلغت حد 5 أسئلة في اليوم. ارجع غداً، أو استخدم بوت تيليجرام التابع لـ HazardSignal لتلقي إحاطات بلا حدود.",
-    httpError: "عذراً، حدث خطأ في المساعد. حاول مرة أخرى.",
-    networkError: "خطأ في الشبكة — تعذر الوصول إلى المساعد. تحقق من اتصالك."
-  },
   tr: {
     intro: "Bugün Yangın Riski Hakkında Bana Her Şeyi Sor ..",
     sub: "Günde 5 Soru",
@@ -66,15 +48,15 @@ const STRINGS = {
 };
 
 const SUGGESTED = [
-  { en: "What's the riskiest district today?", ar: "أي منطقة الأخطر اليوم؟", tr: "Bugün en riskli ilçe hangisi?" },
-  { en: "Are there active fires right now?", ar: "هل توجد حرائق نشطة الآن؟", tr: "Şu anda aktif yangın var mı?" },
-  { en: "How will the weather affect tomorrow?", ar: "كيف سيؤثر الجو غداً؟", tr: "Hava yarın nasıl olacak?" },
-  { en: "Show me Alanya's recent trend", ar: "أرني اتجاه Alanya الأخير", tr: "Alanya'nın son trendini göster" }
+  { en: "What's the riskiest district today?", tr: "Bugün en riskli ilçe hangisi?" },
+  { en: "Are there active fires right now?", tr: "Şu anda aktif yangın var mı?" },
+  { en: "How will the weather affect tomorrow?", tr: "Hava yarın nasıl olacak?" },
+  { en: "Show me Alanya's recent trend", tr: "Alanya'nın son trendini göster" }
 ];
 
 function pickLocale(locale) {
   const k = String(locale || "en").toLowerCase();
-  if (k === "ar" || k === "tr") return k;
+  if (k === "tr") return k;
   return "en";
 }
 

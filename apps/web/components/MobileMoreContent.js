@@ -23,21 +23,6 @@ const COPY = {
     attribution: "Attributions",
     attributionBody: "OpenStreetMap, NASA FIRMS, Google Earth Engine."
   },
-  ar: {
-    notifications: "الإشعارات",
-    telegramTitle: "تنبيهات Telegram",
-    telegramBody: "تصلك التنبيهات الحرجة لحظياً.",
-    telegramCta: "فتح البوت",
-    pushTitle: "إشعارات المتصفح",
-    pushBody: "إشعارات هادئة على جهازك.",
-    language: "اللغة",
-    references: "مراجع",
-    methodology: "المنهجية",
-    methodologyBody: "كيف نحسب الخطر ونطلق التنبيهات.",
-    legal: "قانوني",
-    attribution: "المصادر",
-    attributionBody: "OpenStreetMap, NASA FIRMS, Google Earth Engine."
-  },
   tr: {
     notifications: "Bildirimler",
     telegramTitle: "Telegram uyarıları",
@@ -57,7 +42,6 @@ const COPY = {
 
 const LOCALES = [
   { code: "en", label: "English" },
-  { code: "ar", label: "العربية" },
   { code: "tr", label: "Türkçe" }
 ];
 

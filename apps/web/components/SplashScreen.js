@@ -49,7 +49,19 @@ export default function SplashScreen() {
       <div className="splash-glow" />
       <div className="splash-content">
         <div className="splash-mark">
-          <span className="splash-mark-dot" />
+          <svg viewBox="0 0 64 64" width="44" height="44">
+            <defs>
+              <linearGradient id="hs-arc-splash" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#ff5a1f" />
+                <stop offset="100%" stopColor="#ff8a3d" />
+              </linearGradient>
+            </defs>
+            <path d="M 8 42 A 24 24 0 0 1 56 42" fill="none" stroke="url(#hs-arc-splash)" strokeWidth="3.2" strokeLinecap="round" opacity="0.95" />
+            <path d="M 16 42 A 16 16 0 0 1 48 42" fill="none" stroke="url(#hs-arc-splash)" strokeWidth="3.2" strokeLinecap="round" opacity="0.6" />
+            <path d="M 23 42 A 9 9 0 0 1 41 42" fill="none" stroke="url(#hs-arc-splash)" strokeWidth="3.2" strokeLinecap="round" opacity="0.3" />
+            <circle cx="32" cy="42" r="3.4" fill="#ff8a3d" />
+            <circle cx="32" cy="42" r="1.6" fill="#ffffff" opacity="0.95" />
+          </svg>
         </div>
         <h1 className="splash-title">HazardSignal</h1>
         <p className="splash-tagline">Daily wildfire signals</p>
