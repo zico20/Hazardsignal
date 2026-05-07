@@ -15,10 +15,14 @@ export async function GET(request) {
   const next = rawNext.startsWith("/") ? rawNext : "/";
 
   if (code) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const cookieNames = cookieStore.getAll().map(c => c.name);
+    console.log("[auth/callback] cookies received:", cookieNames.join(", ") || "(none)");
+
     const supabase = await getSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) {
-      // Log so it shows up in journalctl, but don't leak details to the URL.
       console.error("[auth/callback] exchange failed:", error.message);
       return NextResponse.redirect(`${origin}/en/signin?err=callback`);
     }
