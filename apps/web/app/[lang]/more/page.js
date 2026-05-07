@@ -23,7 +23,12 @@ export default async function MorePage({ params }) {
           locale={locale}
           runDate={latestRun?.run_date || "-"}
           telegramUrl={telegramUrl}
-          user={user ? { email: user.email, id: user.id } : null}
+          user={user ? {
+            email: user.email,
+            id: user.id,
+            name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+            avatarUrl: user.user_metadata?.avatar_url || user.user_metadata?.picture || null
+          } : null}
         />
       </div>
 

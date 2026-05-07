@@ -95,28 +95,36 @@ export default function MobileMoreContent({
 
       <div className="m-more-scroll">
         {/* Account section sits at the top so signing in is the first thing
-            visitors see in the More tab. */}
-        <section className="m-more-section">
-          <h3 className="m-more-section-title">{at.yourAccount}</h3>
-          {user ? (
-            <div className="m-more-row m-more-row-static">
-              <span className="m-more-row-icon" data-tone="account">
-                <MicroIcon name="user" />
-              </span>
-              <div className="m-more-row-body">
-                <strong>{at.signedInAs}</strong>
-                <span>{user.email || ""}</span>
+            visitors see in the More tab. When signed in, render a richer
+            welcome card (avatar + name + email + sign-out). */}
+        {user ? (
+          <section className="m-more-section m-more-account-section">
+            <div className="m-more-account-card">
+              {user.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="m-more-account-avatar" src={user.avatarUrl} alt="" />
+              ) : (
+                <span className="m-more-account-avatar m-more-account-avatar-fallback" aria-hidden="true">
+                  {(user.name || user.email || "?").charAt(0).toUpperCase()}
+                </span>
+              )}
+              <div className="m-more-account-body">
+                {user.name && <strong className="m-more-account-name">{user.name}</strong>}
+                <span className="m-more-account-email">{user.email || ""}</span>
               </div>
               <button
                 type="button"
-                className="m-more-row-action m-more-signout-btn"
+                className="m-more-signout-btn"
                 onClick={handleSignOut}
                 disabled={signingOut}
               >
                 {signingOut ? "…" : at.signOut}
               </button>
             </div>
-          ) : (
+          </section>
+        ) : (
+          <section className="m-more-section">
+            <h3 className="m-more-section-title">{at.yourAccount}</h3>
             <Link className="m-more-row" href={"/" + locale + "/signin?next=/" + locale + "/more"}>
               <span className="m-more-row-icon" data-tone="account">
                 <MicroIcon name="user" />
@@ -127,8 +135,8 @@ export default function MobileMoreContent({
               </div>
               <span className="m-more-row-action">→</span>
             </Link>
-          )}
-        </section>
+          </section>
+        )}
 
         <section className="m-more-section">
           <h3 className="m-more-section-title">{c.notifications}</h3>

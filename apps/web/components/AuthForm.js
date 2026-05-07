@@ -31,8 +31,11 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
     );
   }
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [busy, setBusy] = useState(false);
   const [info, setInfo] = useState(null); // { kind: "ok"|"err", text }
 
@@ -53,6 +56,19 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
   async function handlePasswordSubmit(e) {
     e.preventDefault();
     if (busy || !email.trim() || !password) return;
+
+    // Sign-up only: extra client-side validation before the network call.
+    if (!isSignIn) {
+      if (password !== confirmPassword) {
+        setInfo({ kind: "err", text: t.passwordMismatch });
+        return;
+      }
+      if (!agreeTerms) {
+        setInfo({ kind: "err", text: t.termsRequired });
+        return;
+      }
+    }
+
     setBusy(true);
     setInfo(null);
     try {
@@ -68,14 +84,18 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: callbackUrl }
+          options: {
+            emailRedirectTo: callbackUrl,
+            // Stash the user's full name in user_metadata so we can greet
+            // them by name in the More tab + nav avatar without a profile
+            // table round-trip.
+            data: name.trim() ? { full_name: name.trim() } : undefined
+          }
         });
         if (error) {
           setInfo({ kind: "err", text: explainError(error) });
           return;
         }
-        // Supabase returns the user immediately; if email confirm is enabled,
-        // session will be null until they click the confirmation link.
         if (data.session) {
           router.replace(redirectTo);
           router.refresh();
@@ -136,6 +156,14 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
       <h1 className="auth-title">{isSignIn ? t.signInTitle : t.signUpTitle}</h1>
       <p className="auth-subtitle">{isSignIn ? t.signInSubtitle : t.signUpSubtitle}</p>
 
+      {!isSignIn && (
+        <ul className="auth-benefits" aria-label={t.benefitsTitle}>
+          <li><span className="auth-benefits-tick" aria-hidden="true">✓</span> {t.benefit1}</li>
+          <li><span className="auth-benefits-tick" aria-hidden="true">✓</span> {t.benefit2}</li>
+          <li><span className="auth-benefits-tick" aria-hidden="true">✓</span> {t.benefit3}</li>
+        </ul>
+      )}
+
       <button
         type="button"
         className="auth-google-btn"
@@ -158,6 +186,25 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
       <div className="auth-divider"><span>{t.or}</span></div>
 
       <form className="auth-form" onSubmit={handlePasswordSubmit}>
+        {/* Sign-up only: name field stored in user_metadata.full_name */}
+        {!isSignIn && (
+          <label className="auth-label">
+            <span>{t.nameLabel}</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={t.namePlaceholder}
+              required
+              autoComplete="name"
+              disabled={busy}
+              className="auth-input"
+              maxLength={80}
+            />
+            <span className="auth-hint">{t.nameHint}</span>
+          </label>
+        )}
+
         <label className="auth-label">
           <span>{t.emailLabel}</span>
           <input
@@ -188,7 +235,48 @@ export default function AuthForm({ mode = "signin", locale = "en", redirectTo = 
           {!isSignIn && <span className="auth-hint">{t.passwordHint}</span>}
         </label>
 
-        <button type="submit" className="auth-submit" disabled={busy || !email.trim() || !password}>
+        {/* Sign-up only: confirm password */}
+        {!isSignIn && (
+          <label className="auth-label">
+            <span>{t.confirmPasswordLabel}</span>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder={t.confirmPasswordPlaceholder}
+              required
+              autoComplete="new-password"
+              minLength={8}
+              disabled={busy}
+              className="auth-input"
+            />
+          </label>
+        )}
+
+        {/* Sign-up only: terms checkbox */}
+        {!isSignIn && (
+          <label className="auth-terms">
+            <input
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+              disabled={busy}
+              className="auth-terms-checkbox"
+            />
+            <span className="auth-terms-text">
+              {t.termsLabel}{" "}
+              <Link href={`${localePrefix}/methodology`} target="_blank" className="auth-terms-link">{t.termsLink}</Link>
+              {" "}{t.termsAnd}{" "}
+              <Link href={`${localePrefix}/methodology`} target="_blank" className="auth-terms-link">{t.privacyLink}</Link>.
+            </span>
+          </label>
+        )}
+
+        <button
+          type="submit"
+          className="auth-submit"
+          disabled={busy || !email.trim() || !password || (!isSignIn && (!name.trim() || !confirmPassword || !agreeTerms))}
+        >
           {busy
             ? (isSignIn ? t.signingIn : t.creatingAccount)
             : (isSignIn ? t.signInBtn : t.signUpBtn)}

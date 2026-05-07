@@ -7026,3 +7026,127 @@ form,
     filter: brightness(1.05);
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────
+   More tab — Account welcome card (signed in)
+   ────────────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .m-more-account-section {
+    padding-top: 4px;
+  }
+  .m-more-account-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(255, 138, 61, 0.14) 0%, rgba(255, 49, 49, 0.10) 100%);
+    border: 1px solid rgba(255, 138, 61, 0.35);
+    border-radius: 14px;
+  }
+  .m-more-account-avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: linear-gradient(135deg, #ff8a3d 0%, #ff5454 100%);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    box-shadow: 0 4px 14px rgba(255, 95, 31, 0.35);
+  }
+  .m-more-account-avatar-fallback {
+    line-height: 1;
+  }
+  .m-more-account-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .m-more-account-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .m-more-account-email {
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Sign-up benefits list */
+.auth-benefits {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  background: rgba(255, 138, 61, 0.08);
+  border: 1px solid rgba(255, 138, 61, 0.22);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.auth-benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+.auth-benefits-tick {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff8a3d 0%, #ff5454 100%);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+/* Sign-up Terms checkbox row */
+.auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+.auth-terms-checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #ff8a3d;
+  cursor: pointer;
+}
+.auth-terms-text {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+.auth-terms-link {
+  color: #ff8a3d;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.auth-terms-link:hover { color: #ffae6e; }
