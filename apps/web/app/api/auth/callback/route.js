@@ -5,32 +5,47 @@ import { createServerClient } from "@supabase/ssr";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-// OAuth + magic-link return URL.
-// Supabase appends `?code=…` after the user clicks the link / completes the
-// OAuth dance. We exchange that code for a session and write the resulting
-// session cookies directly onto the redirect response — using cookies()
-// from next/headers does NOT auto-attach them to NextResponse.redirect().
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const errorParam = searchParams.get("error");
+  const errorDesc = searchParams.get("error_description");
   const rawNext = searchParams.get("next") || "/";
   const next = rawNext.startsWith("/") ? rawNext : "/";
 
+  console.log("[auth/callback] hit:", JSON.stringify({
+    hasCode: !!code,
+    codeLen: code ? code.length : 0,
+    errorParam,
+    errorDesc,
+    next
+  }));
+
   const response = NextResponse.redirect(`${origin}${next}`);
 
-  if (!code) return response;
+  if (!code) {
+    console.warn("[auth/callback] no code in URL");
+    return NextResponse.redirect(`${origin}/en/signin?err=nocode`);
+  }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anonKey) return response;
+  if (!url || !anonKey) {
+    console.error("[auth/callback] missing supabase env");
+    return response;
+  }
 
   const cookieStore = await cookies();
+  const cookieNames = cookieStore.getAll().map(c => c.name);
+  console.log("[auth/callback] cookies:", cookieNames.join(", ") || "(none)");
+
   const supabase = createServerClient(url, anonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
       },
       setAll(cookiesToSet) {
+        console.log("[auth/callback] setAll cookies:", cookiesToSet.map(c => c.name).join(", "));
         for (const { name, value, options } of cookiesToSet) {
           response.cookies.set(name, value, options);
         }
@@ -38,11 +53,12 @@ export async function GET(request) {
     }
   });
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
-    console.error("[auth/callback] exchange failed:", error.message);
-    return NextResponse.redirect(`${origin}/en/signin?err=callback`);
+    console.error("[auth/callback] exchange failed:", error.message, "code:", error.code, "status:", error.status);
+    return NextResponse.redirect(`${origin}/en/signin?err=callback&msg=${encodeURIComponent(error.message)}`);
   }
 
+  console.log("[auth/callback] exchange OK, user:", data?.user?.email || "(no email)");
   return response;
 }

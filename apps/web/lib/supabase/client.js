@@ -17,6 +17,13 @@ export function getSupabaseBrowserClient() {
   // Return null when not configured so callers can render a friendly
   // "auth not yet configured" state instead of crashing the bundle.
   if (!url || !anonKey) return null;
-  browserClient = createBrowserClient(url, anonKey);
+  browserClient = createBrowserClient(url, anonKey, {
+    auth: {
+      flowType: "pkce",
+      detectSessionInUrl: true,
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  });
   return browserClient;
 }
