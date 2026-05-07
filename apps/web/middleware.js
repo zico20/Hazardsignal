@@ -43,11 +43,13 @@ export async function middleware(request) {
   return response;
 }
 
-// Run on every navigation EXCEPT static files, the favicon, and Next's
-// internal _next/* paths. The pipeline/healthcheck JSON routes don't need
-// session refresh either, but they're cheap enough to skip explicitly.
+// Run on every navigation EXCEPT static files, the favicon, Next's
+// internal _next/* paths, and the auth API routes. The auth routes are
+// excluded because the PKCE OAuth flow stores a temporary code_verifier
+// cookie that this middleware can clobber when refreshing sessions —
+// causing "invalid flow state" errors at the callback exchange step.
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon\\.ico|icon\\.svg|api/healthcheck|api/run|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
+    "/((?!_next/static|_next/image|favicon\\.ico|icon\\.svg|api/healthcheck|api/run|api/auth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"
   ]
 };
