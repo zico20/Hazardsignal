@@ -39,7 +39,7 @@ export default async function MethodologyPage({ params }) {
           criticalAlertCount={alerts.filter((a) => a.severity === "Critical").length}
           dimBg
         >
-          <DesktopMethodV3 latestRun={latestRun} rules={rules} />
+          <DesktopMethodV3 locale={locale} latestRun={latestRun} rules={rules} />
         </DesktopShellV3>
       </div>
     </div>
