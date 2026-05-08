@@ -49,6 +49,58 @@ const DEFAULT_LEGEND_ROWS = [
   { class: "Very High", color: "#ef4444" }
 ];
 
+// Right-rail copy. Kept inline since these labels are V3-specific and
+// not worth adding to the global i18n bundle.
+const RAIL_STRINGS = {
+  en: {
+    search: "Search district…",
+    filter: "FILTER",
+    chipAll: "All",
+    chipCritical: "Critical only",
+    chipHigh: "High+",
+    layers: "LAYERS",
+    layerRisk: "Risk surface",
+    layerFires: "Active fires",
+    layerWeather: "Weather",
+    legend: "RISK LEGEND",
+    sources: "Source: NASA FIRMS · Sentinel-2 · ERA5",
+    updated: "Updated",
+    live: "LIVE",
+    highArea: "high-risk area",
+    hotspots: "hotspots",
+    legendVeryLow: "Very Low",
+    legendLow: "Low",
+    legendMedium: "Medium",
+    legendHigh: "High",
+    legendVeryHigh: "Very High"
+  },
+  tr: {
+    search: "İlçe ara…",
+    filter: "FİLTRE",
+    chipAll: "Tümü",
+    chipCritical: "Sadece kritik",
+    chipHigh: "Yüksek+",
+    layers: "KATMANLAR",
+    layerRisk: "Risk yüzeyi",
+    layerFires: "Aktif yangınlar",
+    layerWeather: "Hava",
+    legend: "RİSK LEJANTI",
+    sources: "Kaynak: NASA FIRMS · Sentinel-2 · ERA5",
+    updated: "Güncellendi",
+    live: "CANLI",
+    highArea: "yüksek risk alanı",
+    hotspots: "sıcak nokta",
+    legendVeryLow: "Çok Düşük",
+    legendLow: "Düşük",
+    legendMedium: "Orta",
+    legendHigh: "Yüksek",
+    legendVeryHigh: "Çok Yüksek"
+  }
+};
+function pickRailStrings(locale) {
+  return RAIL_STRINGS[locale] || RAIL_STRINGS.en;
+}
+
 export default function DesktopHomeV3({
   locale = "en",
   messages,
@@ -63,7 +115,8 @@ export default function DesktopHomeV3({
     () => [...districts].sort((a, b) => (b.max_fire_prob ?? 0) - (a.max_fire_prob ?? 0)),
     [districts]
   );
-  const [focusId, setFocusId] = useState(sorted[0]?.district_id || null);
+  // Focus is opt-in: nothing selected until the user clicks a district.
+  const [focusId, setFocusId] = useState(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [layers, setLayers] = useState({ risk: true, fires: true, weather: true });
@@ -79,7 +132,7 @@ export default function DesktopHomeV3({
     return arr;
   }, [sorted, filter, search]);
 
-  const focus = visibleDistricts.find((d) => d.district_id === focusId) || visibleDistricts[0] || sorted[0];
+  const focus = focusId ? visibleDistricts.find((d) => d.district_id === focusId) : null;
 
   const weatherTemp = weather?.current?.temp_c;
   const weatherHum = weather?.current?.humidity_pct;
@@ -87,8 +140,15 @@ export default function DesktopHomeV3({
   const weatherDir = weather?.current?.wind_direction || "";
 
   const t = messages?.home || {};
-  const mapMsg = messages?.map || {};
-  const legendRows = legend.length ? legend.map((l) => ({ class: l.class, color: l.color })) : DEFAULT_LEGEND_ROWS;
+  const r = pickRailStrings(locale);
+  // Legend rows: localize the class name; keep the color from the live
+  // mapConfig.legend if present, otherwise our default palette.
+  const baseLegend = legend.length ? legend : DEFAULT_LEGEND_ROWS;
+  const LEGEND_KEYS = ["legendVeryLow", "legendLow", "legendMedium", "legendHigh", "legendVeryHigh"];
+  const legendRows = baseLegend.slice(0, 5).map((l, i) => ({
+    class: r[LEGEND_KEYS[i]] || l.class,
+    color: l.color
+  }));
 
   return (
     <div className="dv3-home-grid">
@@ -106,7 +166,7 @@ export default function DesktopHomeV3({
         <div className="dv3-hero-overlay-top">
           <div className="dv3-live-tag">
             <span className="dv3-live-pulse"></span>
-            {messages?.common?.live || "LIVE"}
+            {r.live}
           </div>
         </div>
 
@@ -127,19 +187,24 @@ export default function DesktopHomeV3({
         {focus && (
           <div className="dv3-focus-sheet">
             <div className="dv3-focus-info">
-              <h2>{focus.district_name}</h2>
+              <div className="dv3-focus-title-row">
+                <h2>{focus.district_name}</h2>
+                <Link
+                  className="dv3-btn-secondary"
+                  href={`/${locale}/districts/${focus.district_id}`}
+                >
+                  District <ArrowIcon style={{ width: 12, height: 12 }} />
+                </Link>
+              </div>
               <span className="dv3-focus-class">
-                {riskClassFromProb(focus.max_fire_prob, locale)}
-                {focus.high_or_very_high_area_pct != null ? ` · ${(focus.high_or_very_high_area_pct).toFixed(1)}% ${t.highArea || "high-risk area"}` : ""}
-                {focus.hotspot_count_24h != null ? ` · ${focus.hotspot_count_24h} ${t.hotspots || "hotspots"}` : ""}
+                <span>{riskClassFromProb(focus.max_fire_prob, locale)}</span>
+                {focus.high_or_very_high_area_pct != null && (
+                  <span>{(focus.high_or_very_high_area_pct).toFixed(1)}% {r.highArea}</span>
+                )}
+                {focus.hotspot_count_24h != null && (
+                  <span>{focus.hotspot_count_24h} {r.hotspots}</span>
+                )}
               </span>
-              <Link
-                className="dv3-btn-secondary"
-                style={{ marginTop: 14, display: "inline-flex" }}
-                href={`/${locale}/districts/${focus.district_id}`}
-              >
-                District <ArrowIcon style={{ width: 12, height: 12 }} />
-              </Link>
             </div>
             <div className="dv3-focus-prob" data-tier={focusTier(focus.max_fire_prob ?? 0)}>
               <div className="dv3-pct">{Math.round((focus.max_fire_prob ?? 0) * 100)}%</div>
@@ -157,17 +222,17 @@ export default function DesktopHomeV3({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={mapMsg.search || "Search district…"}
+            placeholder={r.search}
           />
         </div>
 
         <div>
-          <div className="dv3-rail-eyebrow">{mapMsg.filter || "FILTER"}</div>
+          <div className="dv3-rail-eyebrow">{r.filter}</div>
           <div className="dv3-chips">
             {[
-              { k: "all",      l: mapMsg.all || "All" },
-              { k: "critical", l: mapMsg.criticalOnly || mapMsg.critical || "Critical only" },
-              { k: "high",     l: "High+" }
+              { k: "all",      l: r.chipAll },
+              { k: "critical", l: r.chipCritical },
+              { k: "high",     l: r.chipHigh }
             ].map((c) => (
               <button
                 key={c.k}
@@ -182,11 +247,11 @@ export default function DesktopHomeV3({
         </div>
 
         <div>
-          <div className="dv3-rail-eyebrow">{mapMsg.layers || "LAYERS"}</div>
+          <div className="dv3-rail-eyebrow">{r.layers}</div>
           {[
-            { k: "risk",    l: mapMsg.layerRisk    || "Risk surface" },
-            { k: "fires",   l: mapMsg.layerFires   || "Active fires" },
-            { k: "weather", l: mapMsg.layerWeather || "Weather" }
+            { k: "risk",    l: r.layerRisk },
+            { k: "fires",   l: r.layerFires },
+            { k: "weather", l: r.layerWeather }
           ].map((lyr) => (
             <label key={lyr.k} className="dv3-layer-row">
               <span>{lyr.l}</span>
@@ -203,7 +268,7 @@ export default function DesktopHomeV3({
         </div>
 
         <div>
-          <div className="dv3-rail-eyebrow">{mapMsg.legend || "RISK LEGEND"}</div>
+          <div className="dv3-rail-eyebrow">{r.legend}</div>
           <div className="dv3-legend-strip">
             {legendRows.map((l, i) => (
               <div key={i} style={{ background: l.color }} />
@@ -221,8 +286,8 @@ export default function DesktopHomeV3({
         </div>
 
         <div className="dv3-rail-source">
-          <div>{mapMsg.sources || "Source: NASA FIRMS · Sentinel-2 · ERA5"}</div>
-          <div>{(mapMsg.updated || "Updated")} {runDate}</div>
+          <div>{r.sources}</div>
+          <div>{r.updated} {runDate}</div>
         </div>
       </aside>
     </div>

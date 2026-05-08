@@ -3,6 +3,7 @@ import DesktopShellV3 from "../../../../components/DesktopShellV3";
 import DesktopDistrictDetailV3 from "../../../../components/DesktopDistrictDetailV3";
 import { getAlertEvents, getDistrictById, getDistrictHistory, getLatestRun } from "../../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../../lib/i18n";
+import { getTelegramSubscribeUrl } from "../../../../lib/publicLinks";
 
 export default async function DistrictPage({ params }) {
   const resolvedParams = await params;
@@ -19,7 +20,7 @@ export default async function DistrictPage({ params }) {
 
   if (!district) {
     return (
-      <div className="shell">
+      <div className="shell" suppressHydrationWarning>
         <section className="panel">
           <h2>{messages.common.notFound}</h2>
           <div style={{ marginTop: 14 }}>
@@ -36,9 +37,10 @@ export default async function DistrictPage({ params }) {
   const runDate = latestRun?.run_date || "-";
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/districts"

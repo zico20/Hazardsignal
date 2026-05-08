@@ -3,6 +3,7 @@ import DesktopShellV3 from "../../../components/DesktopShellV3";
 import DesktopMethodV3 from "../../../components/DesktopMethodV3";
 import { getAlertEvents, getAlertRules, getLatestRun } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
+import { getTelegramSubscribeUrl } from "../../../lib/publicLinks";
 
 export default async function MethodologyPage({ params }) {
   const resolvedParams = await params;
@@ -16,7 +17,7 @@ export default async function MethodologyPage({ params }) {
   ]);
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-mobile-only">
         <MobileMethodologyContent
           locale={locale}
@@ -27,6 +28,7 @@ export default async function MethodologyPage({ params }) {
 
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/methodology"
@@ -35,6 +37,7 @@ export default async function MethodologyPage({ params }) {
           runDate={latestRun?.run_date || "-"}
           modelName={latestRun?.selected_model || "RandomForest"}
           criticalAlertCount={alerts.filter((a) => a.severity === "Critical").length}
+          dimBg
         >
           <DesktopMethodV3 latestRun={latestRun} rules={rules} />
         </DesktopShellV3>

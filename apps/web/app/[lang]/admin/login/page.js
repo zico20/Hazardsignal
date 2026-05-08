@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AdminLoginForm from "../../../../components/AdminLoginForm";
+import DesktopBgParticles from "../../../../components/DesktopBgParticles";
 import { isAdminAuthenticated, isAdminConfigured } from "../../../../lib/adminAuth";
 import { getMessages, normalizeLocale } from "../../../../lib/i18n";
 import { redirect } from "next/navigation";
@@ -38,6 +39,7 @@ export default async function AdminLoginPage({ params }) {
 
   return (
     <div className="dv3-login-page">
+      <DesktopBgParticles />
       <div className="dv3-login-card">
         <div className="dv3-login-brand">
           <div className="dv3-brand-mark"><Logo /></div>

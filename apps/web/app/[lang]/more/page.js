@@ -13,7 +13,7 @@ export default async function MorePage({ params }) {
   const telegramUrl = getTelegramSubscribeUrl();
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-mobile-only">
         <MobileMoreContent
           locale={locale}

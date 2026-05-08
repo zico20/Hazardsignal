@@ -10,6 +10,7 @@ import {
   getSubscribers
 } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
+import { getTelegramSubscribeUrl } from "../../../lib/publicLinks";
 
 export const metadata = {
   robots: {
@@ -34,9 +35,10 @@ export default async function AdminPage({ params }) {
   ]);
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/admin"

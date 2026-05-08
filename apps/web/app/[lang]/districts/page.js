@@ -13,6 +13,7 @@ import {
 } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
 import { deriveMissionState } from "../../../lib/mission";
+import { getTelegramSubscribeUrl } from "../../../lib/publicLinks";
 
 export default async function DistrictsListPage({ params }) {
   const resolvedParams = await params;
@@ -40,7 +41,7 @@ export default async function DistrictsListPage({ params }) {
   const runDate = latestRun?.run_date || "-";
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-mobile-only">
         <MobileMapConsole
           districts={districts}
@@ -58,6 +59,7 @@ export default async function DistrictsListPage({ params }) {
 
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/districts"

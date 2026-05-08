@@ -45,10 +45,11 @@ export default function SplashScreen() {
     <div
       className={["splash-screen", stage === "exiting" ? "exiting" : ""].filter(Boolean).join(" ")}
       aria-hidden="true"
+      suppressHydrationWarning
     >
-      <div className="splash-glow" />
-      <div className="splash-content">
-        <div className="splash-mark">
+      <div className="splash-glow" suppressHydrationWarning />
+      <div className="splash-content" suppressHydrationWarning>
+        <div className="splash-mark" suppressHydrationWarning>
           <svg viewBox="0 0 64 64" width="44" height="44">
             <defs>
               <linearGradient id="hs-arc-splash" x1="0" y1="0" x2="1" y2="0">

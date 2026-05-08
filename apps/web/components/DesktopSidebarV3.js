@@ -29,6 +29,20 @@ const Icon = {
 };
 
 const STORAGE_KEY = "dv3-sidebar-collapsed";
+const ALERTS_SEEN_KEY = "dv3-alerts-seen-count";
+
+// Social profile URLs. Hardcoded for now — flip to env vars later if
+// you spin up real accounts. Empty string disables the icon.
+const SOCIAL = {
+  instagram: "https://instagram.com/hazardsignal",
+  facebook:  "https://facebook.com/hazardsignal",
+  x:         "https://x.com/hazardsignal"
+};
+
+const TelegramGlyph = (p) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M21.7 3.2 2.6 10.5c-1.3.5-1.3 1.3-.2 1.6l4.9 1.5 1.9 5.7c.2.6.1.9.7.9.5 0 .7-.2 1-.5l2.3-2.2 4.8 3.5c.9.5 1.5.2 1.7-.8L23 5.5c.3-1.4-.4-2-1.3-2.3zM8.8 14.8 18 9c.4-.3.8-.1.5.2l-7.6 6.9-.3 3.2-1.8-4.5z" /></svg>);
+const InstagramGlyph = (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" /></svg>);
+const FacebookGlyph = (p) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M14 9V7c0-1.1.9-2 2-2h2V2h-3a4 4 0 0 0-4 4v3H8v3h3v9h3v-9h2.5l.5-3H14z" /></svg>);
+const XGlyph = (p) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M17.5 3h3.2l-7 8 8.2 10h-6.4l-5-6.5L4.5 21H1.3l7.5-8.6L1 3h6.5l4.5 5.9L17.5 3zm-1.1 16h1.8L7.7 5h-2l10.7 14z" /></svg>);
 
 export default function DesktopSidebarV3({
   locale = "en",
@@ -36,7 +50,8 @@ export default function DesktopSidebarV3({
   currentPath = "/",
   runDate = "-",
   modelName = "RandomForest",
-  criticalAlertCount = 0
+  criticalAlertCount = 0,
+  telegramUrl = ""
 }) {
   const t = messages?.nav || {};
   const sec = messages?.sections || { monitor: "MONITOR", reference: "REFERENCE", manage: "MANAGE" };
@@ -60,12 +75,30 @@ export default function DesktopSidebarV3({
     try { localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0"); } catch {}
   }, [collapsed]);
 
+  // Track which alert count the user has already seen so the badge only
+  // re-appears when *new* criticals come in. We store the count, not a
+  // timestamp, so revisiting /alerts with the same backlog stays clean.
+  const [seenCount, setSeenCount] = useState(0);
+  useEffect(() => {
+    try {
+      const v = parseInt(localStorage.getItem(ALERTS_SEEN_KEY) || "0", 10);
+      if (!Number.isNaN(v)) setSeenCount(v);
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (currentPath === "/alerts") {
+      try { localStorage.setItem(ALERTS_SEEN_KEY, String(criticalAlertCount)); } catch {}
+      setSeenCount(criticalAlertCount);
+    }
+  }, [currentPath, criticalAlertCount]);
+  const showAlertBadge = currentPath !== "/alerts" && criticalAlertCount > seenCount;
+
   const liveLabel = t.live || (locale === "tr" ? "Canlı" : "Live");
 
   const items = [
     { key: "live", label: liveLabel, href: `/${locale}`, match: "/", icon: Icon.Live, section: 0 },
     { key: "districts", label: t.districts || "Districts", href: `/${locale}/districts`, match: "/districts", icon: Icon.List, section: 0 },
-    { key: "alerts", label: t.alerts || "Alerts", href: `/${locale}/alerts`, match: "/alerts", icon: Icon.Bell, section: 0, badge: criticalAlertCount > 0 ? criticalAlertCount : null },
+    { key: "alerts", label: t.alerts || "Alerts", href: `/${locale}/alerts`, match: "/alerts", icon: Icon.Bell, section: 0, badge: showAlertBadge ? criticalAlertCount : null },
     { key: "method", label: t.methodology || t.method || "Methodology", href: `/${locale}/methodology`, match: "/methodology", icon: Icon.Book, section: 1 },
     { key: "admin", label: t.admin || "Admin", href: `/${locale}/admin`, match: "/admin", icon: Icon.Cog, section: 2 }
   ];
@@ -107,11 +140,12 @@ export default function DesktopSidebarV3({
   }, []);
 
   return (
-    <aside className="dv3-sidebar">
+    <aside className="dv3-sidebar" suppressHydrationWarning>
       <div
         className="dv3-sidebar-handle"
         onMouseDown={handleMouseDown}
         aria-hidden="true"
+        suppressHydrationWarning
       />
 
       <div className="dv3-brand">
@@ -145,6 +179,42 @@ export default function DesktopSidebarV3({
           </nav>
         </div>
       ))}
+
+      <div className="dv3-sidebar-social">
+        {telegramUrl && (
+          <a
+            href={telegramUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="dv3-telegram-btn"
+            aria-label="Subscribe on Telegram"
+            title="Subscribe on Telegram"
+          >
+            <TelegramGlyph style={{ width: 14, height: 14 }} />
+            <span>Telegram</span>
+          </a>
+        )}
+        <div className="dv3-social-icons">
+          {SOCIAL.instagram && (
+            <a href={SOCIAL.instagram} target="_blank" rel="noreferrer"
+               className="dv3-social-icon" aria-label="Instagram" title="Instagram">
+              <InstagramGlyph />
+            </a>
+          )}
+          {SOCIAL.facebook && (
+            <a href={SOCIAL.facebook} target="_blank" rel="noreferrer"
+               className="dv3-social-icon" aria-label="Facebook" title="Facebook">
+              <FacebookGlyph />
+            </a>
+          )}
+          {SOCIAL.x && (
+            <a href={SOCIAL.x} target="_blank" rel="noreferrer"
+               className="dv3-social-icon" aria-label="X (Twitter)" title="X (Twitter)">
+              <XGlyph />
+            </a>
+          )}
+        </div>
+      </div>
 
       <div className="dv3-sidebar-footer">
         <div>HazardSignal © 2026 · {modelName}</div>

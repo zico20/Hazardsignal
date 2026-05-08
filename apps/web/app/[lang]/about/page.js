@@ -3,6 +3,7 @@ import MobileAboutContent from "../../../components/MobileAboutContent";
 import DesktopShellV3 from "../../../components/DesktopShellV3";
 import { getLatestRun, getDistrictRiskDaily, getAlertEvents } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
+import { getTelegramSubscribeUrl } from "../../../lib/publicLinks";
 
 export default async function AboutPage({ params }) {
   const resolvedParams = await params;
@@ -24,13 +25,14 @@ export default async function AboutPage({ params }) {
   };
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-mobile-only">
         <MobileAboutContent locale={locale} runDate={latestRun?.run_date || "-"} stats={stats} />
       </div>
 
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/about"

@@ -16,6 +16,9 @@ function focusTier(p) {
   if (p >= 0.7) return "warning";
   return "watch";
 }
+function fmtCoord(v) {
+  return v != null ? Number(v).toFixed(2) : "—";
+}
 function riskClassFromProb(p, locale = "en") {
   const RISK = {
     en: { vhigh: "Very High", high: "High", med: "Medium", low: "Low", vlow: "Very Low" },
@@ -105,7 +108,7 @@ export default function DesktopDistrictDetailV3({
         <div>
           <h1 className="dv3-district-name">{district.district_name}</h1>
           <div className="dv3-district-region">
-            {district.lat ?? district.latitude}°N, {district.lon ?? district.longitude}°E · Antalya, TR
+            {fmtCoord(district.lat ?? district.latitude)}°N, {fmtCoord(district.lon ?? district.longitude)}°E · Antalya, TR
           </div>
         </div>
         <div className="dv3-focus-prob" data-tier={focusTier(district.max_fire_prob ?? 0)}>
@@ -184,7 +187,7 @@ export default function DesktopDistrictDetailV3({
             style={{ width: "100%", justifyContent: "center" }}
           >
             <SendIcon style={{ width: 14, height: 14 }} />
-            {t.subscribe || sevMsg.subscribe || "Subscribe to alerts"}
+            Show Me All Alerts
           </Link>
         </div>
       </div>

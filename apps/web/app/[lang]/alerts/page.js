@@ -2,6 +2,7 @@ import DesktopShellV3 from "../../../components/DesktopShellV3";
 import DesktopAlertsV3 from "../../../components/DesktopAlertsV3";
 import { getAlertEvents, getLatestRun } from "../../../lib/data";
 import { getMessages, normalizeLocale } from "../../../lib/i18n";
+import { getTelegramSubscribeUrl } from "../../../lib/publicLinks";
 
 export default async function AlertsPage({ params }) {
   const resolvedParams = await params;
@@ -16,9 +17,10 @@ export default async function AlertsPage({ params }) {
   const rows = alerts.slice(0, 40);
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/alerts"
@@ -28,7 +30,11 @@ export default async function AlertsPage({ params }) {
           modelName={latestRun?.selected_model || "RandomForest"}
           criticalAlertCount={rows.filter((a) => a.severity === "Critical").length}
         >
-          <DesktopAlertsV3 locale={locale} messages={messages} alerts={rows} />
+          <DesktopAlertsV3
+            locale={locale}
+            messages={messages}
+            alerts={rows}
+          />
         </DesktopShellV3>
       </div>
     </div>

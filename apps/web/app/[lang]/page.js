@@ -14,6 +14,7 @@ import {
 } from "../../lib/data";
 import { getMessages, normalizeLocale } from "../../lib/i18n";
 import { deriveMissionState } from "../../lib/mission";
+import { getTelegramSubscribeUrl } from "../../lib/publicLinks";
 
 export default async function DashboardPage({ params }) {
   const resolvedParams = await params;
@@ -43,7 +44,7 @@ export default async function DashboardPage({ params }) {
   const peakProbability = districts.reduce((max, district) => Math.max(max, district.max_fire_prob ?? 0), 0);
 
   return (
-    <div className="shell">
+    <div className="shell" suppressHydrationWarning>
       <div className="m-route-mobile-only">
         <MobileMapConsole
           districts={districts}
@@ -61,6 +62,7 @@ export default async function DashboardPage({ params }) {
 
       <div className="m-route-desktop-only">
         <DesktopShellV3
+          telegramUrl={getTelegramSubscribeUrl()}
           locale={locale}
           messages={messages}
           currentPath="/"
