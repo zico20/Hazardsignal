@@ -8,7 +8,8 @@ import { getMessages, normalizeLocale } from "../../lib/i18n";
 
 // Force every [lang] route to be server-rendered on demand. Without this,
 // Next.js 15 dev tries static-path generation and crashes its worker on
-// child components that use dynamic({ ssr: false }) (e.g. RiskMapShell).
+// child components that use dynamic({ ssr: false }) (e.g. MobileLiveMapV3,
+// DesktopLiveMapV3 — anything Leaflet-backed).
 export const dynamic = "force-dynamic";
 
 export default async function LocaleLayout({ children, params }) {
