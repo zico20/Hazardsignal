@@ -7902,6 +7902,12 @@ html.dv3-light .dv3-hero-card .m-ask-panel {
   height: 100%;
   display: block;
 }
+/* Wireframe + rim use stroke: currentColor — set color per theme so they
+   stay visible on both dark (white-tinted) and light (ink-tinted) bgs. */
+.dv3-earth-wire { color: rgba(255, 255, 255, 0.22); }
+.dv3-earth-rim  { color: rgba(255, 255, 255, 0.3); }
+html.dv3-light .dv3-earth-wire { color: rgba(10, 10, 12, 0.22); }
+html.dv3-light .dv3-earth-rim  { color: rgba(10, 10, 12, 0.3); }
 @keyframes dv3-earth-spin {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }

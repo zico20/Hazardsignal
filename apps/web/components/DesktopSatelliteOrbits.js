@@ -102,8 +102,9 @@ export default function DesktopSatelliteOrbits() {
               <path d="M 70 48 Q 74 47 76 50 L 75 56 Q 72 56 70 53 Z" />
             </g>
 
-            {/* Wireframe — meridians + parallels */}
-            <g fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="0.4">
+            {/* Wireframe — meridians + parallels. stroke comes from CSS via
+                currentColor so light theme can swap white→dark ink. */}
+            <g className="dv3-earth-wire" fill="none" stroke="currentColor" strokeWidth="0.4">
               {/* Equator + mid latitudes */}
               <ellipse cx="50" cy="50" rx="48" ry="9" />
               <ellipse cx="50" cy="50" rx="48" ry="22" />
@@ -115,7 +116,7 @@ export default function DesktopSatelliteOrbits() {
             </g>
 
             {/* Outer rim highlight */}
-            <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.6" />
+            <circle className="dv3-earth-rim" cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.6" />
 
             {/* Inner shadow on the dark side */}
             <circle cx="50" cy="50" r="48" fill="url(#dv3-earth-shade)" />
