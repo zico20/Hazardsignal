@@ -89,18 +89,8 @@ export default function DesktopSatelliteOrbits() {
             {/* Sphere */}
             <circle cx="50" cy="50" r="48" fill="url(#dv3-earth-grad)" />
 
-            {/* Continents — simplified Africa + Europe + Asia silhouettes
-                positioned so Antalya sits roughly upper-mid-right. */}
-            <g clipPath="url(#dv3-earth-clip)" fill="rgba(64, 122, 78, 0.55)">
-              {/* Europe */}
-              <path d="M 40 30 Q 48 28 54 31 L 58 35 Q 56 38 51 38 L 45 39 Q 42 36 40 33 Z" />
-              {/* Africa */}
-              <path d="M 44 42 Q 52 40 56 44 L 58 52 Q 56 60 52 65 L 48 70 Q 44 65 43 58 L 42 50 Q 42 45 44 42 Z" />
-              {/* Asia / Middle East */}
-              <path d="M 58 33 Q 68 30 76 36 L 80 42 Q 76 46 70 46 L 62 44 Q 58 40 58 33 Z" />
-              {/* Indian peninsula hint */}
-              <path d="M 70 48 Q 74 47 76 50 L 75 56 Q 72 56 70 53 Z" />
-            </g>
+            {/* Continents intentionally omitted — only the Antalya pin (the
+                orange dot below) remains as the geographic marker. */}
 
             {/* Wireframe — meridians + parallels. stroke comes from CSS via
                 currentColor so light theme can swap white→dark ink. */}
