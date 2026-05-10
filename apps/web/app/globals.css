@@ -7318,6 +7318,8 @@ html.dv3-light .dv3-hero-card .m-ask-panel {
   color: var(--dv3-muted);
   margin-top: 6px;
 }
+/* Severity tag pattern (Brand Guidelines §Severity tokens):
+   each tier — fill 15% / text 100% / border 40% of the same accent. */
 .dv3-sev-tag {
   font-family: var(--dv3-font-display);
   font-size: 0.62rem;
@@ -7326,12 +7328,26 @@ html.dv3-light .dv3-hero-card .m-ask-panel {
   text-transform: uppercase;
   padding: 4px 8px;
   border-radius: 6px;
-  background: rgba(77,155,214,0.18);
-  color: var(--dv3-watch);
   white-space: nowrap;
+  background: rgba(247,201,72,0.15);
+  color: var(--dv3-watch);
+  border: 1px solid rgba(247,201,72,0.4);
 }
-.dv3-sev-tag[data-sev="Critical"] { background: rgba(239,68,68,0.18); color: var(--dv3-crit); }
-.dv3-sev-tag[data-sev="Warning"]  { background: rgba(245,158,11,0.18); color: var(--dv3-warn); }
+.dv3-sev-tag[data-sev="Watch"] {
+  background: rgba(247,201,72,0.15);
+  color: var(--dv3-watch);
+  border-color: rgba(247,201,72,0.4);
+}
+.dv3-sev-tag[data-sev="Critical"] {
+  background: rgba(255,58,31,0.15);
+  color: var(--dv3-crit);
+  border-color: rgba(255,58,31,0.4);
+}
+.dv3-sev-tag[data-sev="Warning"] {
+  background: rgba(255,138,58,0.15);
+  color: var(--dv3-warn);
+  border-color: rgba(255,138,58,0.4);
+}
 
 .dv3-btn-secondary {
   display: inline-flex;
