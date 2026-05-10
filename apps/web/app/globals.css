@@ -8593,52 +8593,44 @@ html.dv3-light .dv3-sat svg {
 }
 
 /* Admin V3 — left console + right panel layout */
-.dv3-admin-grid {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-.dv3-admin-side {
+/* Admin layout: horizontal tabs above the content panel (replaces the
+   220px sticky sidebar). Uses the same outlined-orange chip pattern as
+   the rest of V3 so active tab matches the brand. */
+.dv3-admin-stack {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 18px 0 0;
-  position: sticky;
-  top: 80px;
+  gap: 18px;
 }
-.dv3-admin-side > button {
+.dv3-admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--dv3-line);
+}
+.dv3-admin-tab {
   background: transparent;
-  border: 1px solid transparent;
+  border: 1px solid var(--dv3-line);
   color: var(--dv3-ink-2);
   font-family: var(--dv3-font-display);
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-weight: 600;
-  padding: 12px 16px;
-  border-radius: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
   cursor: pointer;
-  text-align: left;
-  transition: background 140ms, color 140ms;
+  letter-spacing: 0.01em;
+  transition: background 140ms, color 140ms, border-color 140ms;
 }
-.dv3-admin-side > button:hover {
+.dv3-admin-tab:hover {
   background: var(--dv3-bg-3);
   color: var(--dv3-ink);
+  border-color: var(--dv3-line-2);
 }
-.dv3-admin-side > button.active {
-  background: var(--dv3-accent-soft);
+.dv3-admin-tab.active {
+  background: transparent;
+  border-color: var(--dv3-accent);
   color: var(--dv3-accent);
 }
-.dv3-admin-user {
-  margin-top: 22px;
-  padding: 14px 16px;
-  background: var(--dv3-bg-2);
-  border: 1px solid var(--dv3-line);
-  border-radius: 10px;
-  font-size: 0.78rem;
-  color: var(--dv3-muted);
-  line-height: 1.5;
-}
-.dv3-admin-user strong { color: var(--dv3-ink); display: block; margin-top: 4px; }
 
 /* Subscriber rows */
 .dv3-subscriber-row {
@@ -8739,8 +8731,6 @@ html.dv3-light .dv3-sat svg {
 }
 
 @media (max-width: 1100px) {
-  .dv3-admin-grid { grid-template-columns: 1fr; }
-  .dv3-admin-side { position: static; }
   .dv3-rules-grid, .dv3-admin-add-form { grid-template-columns: 1fr; }
 }
 

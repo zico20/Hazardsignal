@@ -102,16 +102,12 @@ export default function DesktopAdminV3({
   }
 
   return (
-    <div className="dv3-admin-grid dv3-page-pad">
-      <aside className="dv3-admin-side">
-        <div className="dv3-rail-eyebrow" style={{ padding: "0 14px 8px" }}>Console</div>
-        <button type="button" className={tab === "subs" ? "active" : ""} onClick={() => setTab("subs")}>Subscribers</button>
-        <button type="button" className={tab === "rules" ? "active" : ""} onClick={() => setTab("rules")}>Alert rules</button>
-        <button type="button" className={tab === "test" ? "active" : ""} onClick={() => setTab("test")}>Test alert</button>
-        <div className="dv3-admin-user">
-          Logged in as <strong>{user}</strong>
-        </div>
-      </aside>
+    <div className="dv3-admin-stack dv3-page-pad">
+      <nav className="dv3-admin-tabs" aria-label="Admin sections">
+        <button type="button" className={"dv3-admin-tab" + (tab === "subs"  ? " active" : "")} onClick={() => setTab("subs")}>Subscribers</button>
+        <button type="button" className={"dv3-admin-tab" + (tab === "rules" ? " active" : "")} onClick={() => setTab("rules")}>Alert rules</button>
+        <button type="button" className={"dv3-admin-tab" + (tab === "test"  ? " active" : "")} onClick={() => setTab("test")}>Test alert</button>
+      </nav>
 
       <div>
         {tab === "subs" && (
