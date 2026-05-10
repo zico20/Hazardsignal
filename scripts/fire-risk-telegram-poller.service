@@ -1,6 +1,8 @@
+# Subscribes Telegram users via long-polling because the VPS provider
+# drops inbound connections from Telegram IP ranges (verified with
+# tcpdump). See services/worker/src/telegramPoller.js for the why.
 [Unit]
 Description=Fire Risk Telegram Long-Poller
-Documentation=Subscribes Telegram users via long-polling because the VPS provider drops inbound connections from Telegram IP ranges.
 After=network-online.target
 Wants=network-online.target
 
