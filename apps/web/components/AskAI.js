@@ -91,6 +91,19 @@ export default function AskAI({ locale = "en", closeOnOutsideClick = false }) {
     };
   }, [closeOnOutsideClick, open]);
 
+  // Mobile only: when the panel is open, hide the bottom sheet + weather
+  // chips so they don't render on top of the panel. `.m-live-map` uses
+  // `isolation: isolate` (required to keep Leaflet panes out of page UI),
+  // which traps any z-index inside it below the sheet's own z-index. CSS
+  // can't escape that — but we can hide the elements that overlap.
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    const cls = "m-ask-open";
+    if (open) document.body.classList.add(cls);
+    else document.body.classList.remove(cls);
+    return () => document.body.classList.remove(cls);
+  }, [open]);
+
   const userTurns = messages.filter((m) => m.role === "user").length;
   const reachedTurnLimit = userTurns >= MAX_USER_TURNS;
 

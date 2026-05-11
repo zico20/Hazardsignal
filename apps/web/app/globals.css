@@ -4093,6 +4093,18 @@ form,
      + twinkle, respects prefers-reduced-motion). Sits behind page content
      via z-index: 0 + `position: relative; z-index: 1` on scroll containers.
      ────────────────────────────────────────────────────────────────── */
+  /* While Ask AI is open on mobile, hide the sheet + weather chips so they
+     don't render on top of the panel. `.m-live-map` has isolation:isolate
+     which traps the panel inside its stacking context below the sheet's
+     z-index — CSS alone can't escape that, so we mute the conflicting
+     overlays instead (Ask AI body sets `body.m-ask-open` via JS). */
+  body.m-ask-open .m-sheet-shell,
+  body.m-ask-open .m-sheet-above {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 160ms ease;
+  }
+
   .m-bg-particles {
     position: fixed;
     inset: 0;
