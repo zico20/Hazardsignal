@@ -22,7 +22,7 @@ import { dirname, resolve } from "node:path";
 import { getConfig } from "./config.js";
 
 const config = getConfig();
-import { appendRecord } from "./dataStore.js";
+import { appendRecord, readCollection } from "./dataStore.js";
 import { sendTelegramMessage } from "./telegram.js";
 
 // Where we persist the last processed update_id so a restart doesn't replay
@@ -62,13 +62,67 @@ function buildSubscriberId(chatId) {
   return `tg_${String(chatId)}_all`.replace(/[^a-zA-Z0-9_-]/g, "_");
 }
 
-async function reply(chatId, text) {
+async function reply(chatId, text, parseMode) {
   if (!chatId || !text) return;
   await sendTelegramMessage({
     botToken: config.telegramBotToken,
     chatId,
-    message: text
+    message: text,
+    parseMode,
+    disableWebPagePreview: true
   });
+}
+
+function riskLabel(p) {
+  const v = Number(p || 0);
+  if (v >= 0.85) return "Very High";
+  if (v >= 0.6) return "High";
+  if (v >= 0.4) return "Medium";
+  if (v >= 0.2) return "Low";
+  return "Very Low";
+}
+
+// On /start we send a one-off snapshot of the current risk picture so the
+// subscriber gets something immediately (the daily broadcast stays
+// escalation-only — see deliverTelegramAlerts in runDaily.js — so without
+// this a new subscriber could wait days for their first message).
+async function buildStatusSummary() {
+  let latestRun = null;
+  let districts = [];
+  try {
+    latestRun = await readCollection("latestRun");
+    districts = await readCollection("districtRiskDaily");
+  } catch (err) {
+    console.error("[telegram-poller] status summary read failed:", err.message);
+    return null;
+  }
+  if (!Array.isArray(districts) || districts.length === 0) return null;
+
+  const runDate =
+    (latestRun && (latestRun.run_date || latestRun.run_id)) || "latest run";
+  const ranked = [...districts]
+    .sort((a, b) => Number(b.max_fire_prob ?? 0) - Number(a.max_fire_prob ?? 0))
+    .slice(0, 5);
+
+  const lines = ranked.map((d, i) => {
+    const pct = Math.round(Number(d.max_fire_prob ?? 0) * 100);
+    const fire = Number(d.hotspot_count_24h || 0) > 0
+      ? ` · ${d.hotspot_count_24h} hotspot${d.hotspot_count_24h === 1 ? "" : "s"}`
+      : "";
+    return `${i + 1}. <b>${d.district_name}</b> — ${pct}% (${riskLabel(d.max_fire_prob)})${fire}`;
+  });
+
+  const appUrl = config.publicAppUrl || "";
+  return [
+    `<b>Antalya wildfire risk — ${runDate}</b>`,
+    "",
+    "Top districts right now:",
+    ...lines,
+    "",
+    `Full map: ${appUrl}`,
+    "",
+    "You'll get an alert here whenever a district escalates. Send /stop anytime."
+  ].join("\n");
 }
 
 async function handleMessage(message) {
@@ -102,6 +156,14 @@ async function handleMessage(message) {
     });
     await reply(chatId, "You are now subscribed to HazardSignal alerts for Antalya. Send /stop at any time to unsubscribe.");
     console.log(`[telegram-poller] subscribed ${subscriberId}`);
+    // Immediately follow with the current risk snapshot so the subscriber
+    // isn't left waiting for the next escalation to hear anything.
+    try {
+      const summary = await buildStatusSummary();
+      if (summary) await reply(chatId, summary, "HTML");
+    } catch (err) {
+      console.error(`[telegram-poller] status summary send failed for ${subscriberId}:`, err.message);
+    }
     return;
   }
 
