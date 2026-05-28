@@ -534,7 +534,7 @@ function createRiskOutputsFromProbability(fireRiskProb, regionGeom, regionMask, 
 }
 
 function createRiskOutputsFromClassifier(featureStack, regionGeom, regionMask, config, classifier) {
-  const outputMode = String(config.eeClassifierOutputMode || "CLASSIFICATION").toUpperCase();
+  const outputMode = String(config.eeClassifierOutputMode || "PROBABILITY").toUpperCase();
   let fireRiskProb;
 
   if (outputMode === "MULTIPROBABILITY") {
@@ -555,16 +555,19 @@ function createRiskOutputsFromClassifier(featureStack, regionGeom, regionMask, c
       .updateMask(regionMask)
       .clip(regionGeom);
   } else if (outputMode === "CLASSIFICATION") {
-    const classClassifier = classifier.setOutputMode("CLASSIFICATION");
-    fireRiskProb = featureStack
-      .classify(classClassifier)
-      .toFloat()
-      .rename("FireRiskProb")
-      .updateMask(regionMask)
-      .clip(regionGeom);
+    // CLASSIFICATION returns discrete class labels (0/1 for a binary fire
+    // classifier), not a probability. Feeding those labels into the rest of
+    // the pipeline (which reduces with max() and bins by 0.2/0.4/0.6/0.8
+    // thresholds) collapses every district's max_fire_prob to exactly 0 or
+    // 1 — observed in Supabase from 2026-05-21 onward. Refuse loudly so the
+    // daily pipeline fails fast instead of silently writing junk.
+    throw new Error(
+      "EE_CLASSIFIER_OUTPUT_MODE=CLASSIFICATION is not supported: it returns class labels, " +
+      "not probabilities, and corrupts max_fire_prob. Use PROBABILITY or MULTIPROBABILITY."
+    );
   } else {
     throw new Error(
-      `Unsupported EE_CLASSIFIER_OUTPUT_MODE: ${outputMode}. Use CLASSIFICATION, PROBABILITY, or MULTIPROBABILITY.`
+      `Unsupported EE_CLASSIFIER_OUTPUT_MODE: ${outputMode}. Use PROBABILITY or MULTIPROBABILITY.`
     );
   }
 
