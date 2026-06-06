@@ -37,7 +37,7 @@ async function fetchOpenMeteoOnce(url, timeoutMs) {
   return response.json();
 }
 
-async function fetchOpenMeteoWithRetry(url, { attempts = 2, timeoutMs = 25_000, backoffMs = 3_000 } = {}) {
+async function fetchOpenMeteoWithRetry(url, { attempts = 3, timeoutMs = 25_000, backoffMs = 5_000 } = {}) {
   let lastError;
   for (let i = 0; i < attempts; i++) {
     try {
@@ -45,7 +45,10 @@ async function fetchOpenMeteoWithRetry(url, { attempts = 2, timeoutMs = 25_000, 
     } catch (err) {
       lastError = err;
       if (i < attempts - 1) {
-        await new Promise((r) => setTimeout(r, backoffMs));
+        // Exponential backoff: 5s, 10s. Open-Meteo 502s are usually edge
+        // transients that clear within seconds, so doubling the wait
+        // catches the longer blips without prolonging genuine outages.
+        await new Promise((r) => setTimeout(r, backoffMs * (i + 1)));
       }
     }
   }

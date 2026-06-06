@@ -6,7 +6,11 @@ import { writeCollection } from "./dataStore.js";
 import { sendTelegramMessage } from "./telegram.js";
 
 const FAILURE_STATE_FILE = "weather-failures.json";
-const NOTIFY_AFTER_CONSECUTIVE_FAILURES = 2;
+// Hourly cron. 4 consecutive failures = ~4 hours of true outage before
+// paging anyone — enough to wait out Open-Meteo's typical 502/timeout
+// blips (most clear within 1-2 retries) without going silent on a real
+// extended outage.
+const NOTIFY_AFTER_CONSECUTIVE_FAILURES = 4;
 
 async function resolveRuntimeCacheDir() {
   const candidates = [
